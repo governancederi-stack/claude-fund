@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Fund</title>
+<meta name="description" content="Claude가 운용하는 시드 1억원 한국주식 모의투자 — 매일 아침 판단, 개장가 체결, 종가 기록">
+<style>
+
+:root {
+  color-scheme: light;
+  --page:   #ffffff;
+  --sunken: #f6f7f8;
+  --ink:    #101215;
+  --ink-2:  #565a61;
+  --ink-3:  #8b8f96;
+  --line:   #e6e8ea;
+  --rule:   #101215;
+  --up:     #cc2f26;
+  --down:   #1c5cc4;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page:   #0e0f11;
+    --sunken: #17191c;
+    --ink:    #eceef0;
+    --ink-2:  #9ba0a7;
+    --ink-3:  #6e737a;
+    --line:   #232629;
+    --rule:   #3a3e43;
+    --up:     #e8564b;
+    --down:   #5b91e8;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page:   #0e0f11;
+  --sunken: #17191c;
+  --ink:    #eceef0;
+  --ink-2:  #9ba0a7;
+  --ink-3:  #6e737a;
+  --line:   #232629;
+  --rule:   #3a3e43;
+  --up:     #e8564b;
+  --down:   #5b91e8;
+}
+
+* { box-sizing: border-box; margin: 0; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--page);
+  color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo",
+               system-ui, "Malgun Gothic", sans-serif;
+  font-size: 15px; line-height: 1.5; letter-spacing: -0.005em;
+  padding: 0 40px 80px;
+}
+.wrap { max-width: 1280px; margin: 0 auto; }
+.n { font-variant-numeric: tabular-nums; }
+.up { color: var(--up); } .down { color: var(--down); }
+
+.eyebrow {
+  font-size: .68rem; font-weight: 600; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+
+/* ── 머리 ─────────────────────────── */
+.mast {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 48px; flex-wrap: wrap;
+  padding: 44px 0 22px; border-bottom: 2px solid var(--rule);
+}
+.mast .id .name { font-size: 1.35rem; font-weight: 700; letter-spacing: -.02em; margin-top: 6px; }
+.mast .fig { text-align: right; }
+.mast .fig .v { font-size: 2.7rem; font-weight: 700; letter-spacing: -.035em; line-height: 1; }
+.mast .fig .d { font-size: .98rem; font-weight: 600; margin-top: 8px; }
+
+/* ── 지표 스트립 (가로 전폭) ───────── */
+.strip {
+  display: grid; grid-template-columns: repeat(7, 1fr);
+  border-bottom: 1px solid var(--line);
+}
+.strip > div { padding: 18px 20px 18px 0; }
+.strip .k { font-size: .7rem; color: var(--ink-3); letter-spacing: .04em; }
+.strip .v { font-size: 1.02rem; font-weight: 600; margin-top: 5px; }
+@media (max-width: 900px) { .strip { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 520px) { .strip { grid-template-columns: repeat(2, 1fr); } }
+
+/* ── 섹션 ─────────────────────────── */
+section { padding: 34px 0 30px; border-bottom: 1px solid var(--line); }
+section > h2 { font-size: .96rem; font-weight: 700; letter-spacing: -.01em; }
+section > .note { font-size: .8rem; color: var(--ink-3); margin-top: 4px; }
+.body { margin-top: 22px; }
+
+/* ── 2단 그리드 ───────────────────── */
+.split { display: grid; grid-template-columns: 1.35fr 1fr; gap: 56px; align-items: start; }
+@media (max-width: 860px) { .split { grid-template-columns: 1fr; gap: 34px; } }
+
+/* ── 브리핑: 본문 2단 조판 ─────────── */
+.brief { columns: 2; column-gap: 56px; }
+.brief p { font-size: .9rem; line-height: 1.72; color: var(--ink-2);
+           break-inside: avoid; margin-bottom: 15px; }
+.brief p b { color: var(--ink); font-weight: 700; }
+@media (max-width: 860px) { .brief { columns: 1; } }
+
+/* ── 종목 행: 3영역으로 가로를 쓴다 ── */
+.rows { display: flex; flex-direction: column; }
+.r {
+  display: grid; grid-template-columns: minmax(190px, 1.1fr) minmax(0, 2fr) minmax(150px, .8fr);
+  gap: 32px; align-items: baseline;
+  padding: 16px 0; border-bottom: 1px solid var(--line);
+}
+.r:last-child { border-bottom: none; }
+.r .nm { font-size: .98rem; font-weight: 700; letter-spacing: -.015em; }
+.r .cl { font-size: .7rem; color: var(--ink-3); font-weight: 500; margin-left: 8px; }
+.r .meta { font-size: .78rem; color: var(--ink-3); margin-top: 4px; }
+.r .why { font-size: .82rem; line-height: 1.6; color: var(--ink-2); }
+.r .val { text-align: right; }
+.r .val .a { font-size: .98rem; font-weight: 600; }
+.r .val .p { font-size: .86rem; font-weight: 600; margin-top: 4px; }
+.r .side { font-weight: 700; margin-right: 7px; }
+@media (max-width: 860px) {
+  .r { grid-template-columns: 1fr auto; gap: 6px 18px; }
+  .r .why { grid-column: 1 / -1; margin-top: 6px; }
+  .r .val { grid-row: 1; grid-column: 2; }
+}
+.empty { color: var(--ink-3); font-size: .86rem; }
+.flow { font-size: .74rem; color: var(--ink-3); margin-top: 5px; }
+
+/* ── 차트 ─────────────────────────── */
+.chart svg { width: 100%; display: block; }
+.chart-empty { color: var(--ink-3); font-size: .84rem; padding: 52px 0; text-align: center; }
+
+/* ── 규칙 점검 ─────────────────────── */
+.alert { border-left: 3px solid var(--up); padding: 12px 0 12px 16px; margin-bottom: 10px;
+         font-size: .86rem; color: var(--ink); }
+.note-i { border-left: 3px solid var(--line); padding: 10px 0 10px 16px; margin-bottom: 8px;
+          font-size: .84rem; color: var(--ink-2); }
+.ok { font-size: .86rem; color: var(--ink-2); }
+.fals { margin-top: 20px; }
+.fals .h { font-size: .78rem; color: var(--ink-3); margin-bottom: 12px; }
+.fals .f { display: grid; grid-template-columns: minmax(150px,1fr) 3fr; gap: 20px;
+           padding: 9px 0; border-bottom: 1px solid var(--line); font-size: .82rem; align-items: baseline; }
+.fals .f:last-child { border-bottom: none; }
+.fals .f .t { color: var(--ink-2); }
+@media (max-width: 860px) { .fals .f { grid-template-columns: 1fr; gap: 4px; } }
+
+/* ── 매크로 ───────────────────────── */
+.mac { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0 18px; }
+.mac > div { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.mac .k { font-size: .7rem; color: var(--ink-3); }
+.mac .v { font-size: .94rem; font-weight: 600; margin-top: 3px; }
+.mac .c { font-size: .76rem; font-weight: 600; margin-top: 2px; }
+@media (max-width: 1000px) { .mac { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 620px) { .mac { grid-template-columns: repeat(2, 1fr); } }
+.ev { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 18px; font-size: .82rem; }
+.ev span { color: var(--ink-2); }
+.ev b { color: var(--ink); font-weight: 600; margin-right: 6px; font-variant-numeric: tabular-nums; }
+
+/* ── 배분 ─────────────────────────── */
+.stack { display: flex; height: 8px; overflow: hidden; margin-bottom: 20px; }
+.stack i { display: block; }
+.lg { display: flex; align-items: baseline; gap: 12px; font-size: .85rem;
+      padding: 9px 0; border-bottom: 1px solid var(--line); }
+.lg:last-child { border-bottom: none; }
+.lg .sw { width: 3px; height: 13px; flex-shrink: 0; align-self: center; }
+.lg .nm { flex: 1; color: var(--ink-2); }
+.lg .c { color: var(--ink-3); font-size: .75rem; }
+.lg .v { font-weight: 600; }
+
+footer { padding: 30px 0 0; font-size: .78rem; color: var(--ink-3); line-height: 1.75;
+         max-width: 78ch; }
+footer b { color: var(--ink-2); font-weight: 600; }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast">
+    <div class="id">
+      <div class="eyebrow">모의투자 · 시드 100,000,000원 · Claude가 운용</div>
+      <div class="name">Claude Fund</div>
+    </div>
+    <div class="fig">
+      <div class="v n">98,290,580원</div>
+      <div class="d n down">-1,709,420원 · -1.71%</div>
+    </div>
+  </div>
+
+  <div class="strip">
+    <div><div class="k">평가손익</div><div class="v n down">-775,650원</div></div>
+    <div><div class="k">실현손익</div><div class="v n down">-915,224원</div></div>
+    <div><div class="k">현금 비중</div><div class="v n">21.4%</div></div>
+    <div><div class="k">보유 종목</div><div class="v n">15종목</div></div>
+    <div><div class="k">누적 거래비용</div><div class="v n">105,820원</div></div>
+    <div><div class="k">개설일</div><div class="v n">2026-09-01</div></div>
+    <div><div class="k">기준</div><div class="v n">2026-09-05 13:27</div></div>
+  </div>
+
+  <section>
+    <div class="split">
+      <div>
+        <h2>평가금액 추이</h2>
+        <p class="note">영업일 종가 기준 · 점선은 원금</p>
+        <div class="body chart"><svg viewBox="0 0 600 190" role="img" aria-label="일별 평가금액 추이"><line x1="8" x2="592" y1="34.4" y2="34.4" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="2 5"/><path d="M8.0,79.9 L202.7,135.9 L397.3,147.6 L592.0,100.6 L592.0,168 L8,168 Z" fill="var(--down)" opacity="0.06"/><path d="M8.0,79.9 L202.7,135.9 L397.3,147.6 L592.0,100.6" fill="none" stroke="var(--down)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="592.0" cy="100.6" r="4.5" fill="var(--down)"/><text x="8.0" y="185" text-anchor="start" fill="var(--ink-3)" font-size="11">09.01</text><text x="592.0" y="185" text-anchor="end" fill="var(--ink-3)" font-size="11">09.04</text></svg></div>
+      </div>
+      <div>
+        <h2>자산 배분</h2>
+        <p class="note">단일 동력에 편중되지 않도록 배분한다</p>
+        <div class="body"><div class="stack"><i style="width:13.15%;background:#2b3a4a"></i><i style="width:11.92%;background:#3f5568"></i><i style="width:9.64%;background:#547087"></i><i style="width:9.58%;background:#6b8ba4"></i><i style="width:8.45%;background:#87a6bd"></i><i style="width:8.40%;background:#a3bfd2"></i><i style="width:7.17%;background:#bfd5e3"></i><i style="width:5.60%;background:#4a5568"></i><i style="width:4.71%;background:#647184"></i><i style="width:21.37%;background:var(--line)"></i></div><div class="lg"><span class="sw" style="background:#2b3a4a"></span><span class="nm">AI 기판</span><span class="c">2종목</span><span class="v n">13.2%</span></div><div class="lg"><span class="sw" style="background:#3f5568"></span><span class="nm">AI 전력</span><span class="c">2종목</span><span class="v n">11.9%</span></div><div class="lg"><span class="sw" style="background:#547087"></span><span class="nm">금융</span><span class="c">2종목</span><span class="v n">9.6%</span></div><div class="lg"><span class="sw" style="background:#6b8ba4"></span><span class="nm">방어·배당</span><span class="c">2종목</span><span class="v n">9.6%</span></div><div class="lg"><span class="sw" style="background:#87a6bd"></span><span class="nm">메모리·HBM</span><span class="c">1종목</span><span class="v n">8.5%</span></div><div class="lg"><span class="sw" style="background:#a3bfd2"></span><span class="nm">바이오</span><span class="c">2종목</span><span class="v n">8.4%</span></div><div class="lg"><span class="sw" style="background:#bfd5e3"></span><span class="nm">후공정 장비</span><span class="c">1종목</span><span class="v n">7.2%</span></div><div class="lg"><span class="sw" style="background:#4a5568"></span><span class="nm">발전 EPC</span><span class="c">1종목</span><span class="v n">5.6%</span></div><div class="lg"><span class="sw" style="background:#647184"></span><span class="nm">소비·수출</span><span class="c">2종목</span><span class="v n">4.7%</span></div><div class="lg"><span class="sw" style="background:var(--line)"></span><span class="nm">현금</span><span class="c"></span><span class="v n">21.4%</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>보유 종목</h2>
+    <p class="note">평가액 순</p>
+    <div class="body"><div class="rows"><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">SK하이닉스<span class="cl">메모리·HBM</span></div><div class="meta n">5주 · 평단 1,657,000원 · 비중 8.5%</div></div><div class="val"><div class="a n">8,310,000원</div><div class="p n up">+0.30%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +5.19%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">디아이<span class="cl">후공정 장비</span></div><div class="meta n">224주 · 평단 26,700원 · 비중 7.2%</div></div><div class="val"><div class="a n">7,044,800원</div><div class="p n up">+17.79%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +2.95%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">LS ELECTRIC<span class="cl">AI 전력</span></div><div class="meta n">34주 · 평단 202,000원 · 비중 6.8%</div></div><div class="val"><div class="a n">6,677,600원</div><div class="p n down">-2.77%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +2.19%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">심텍<span class="cl">AI 기판</span></div><div class="meta n">55주 · 평단 125,700원 · 비중 6.6%</div></div><div class="val"><div class="a n">6,484,500원</div><div class="p n down">-6.21%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +0.77%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">이수페타시스<span class="cl">AI 기판</span></div><div class="meta n">58주 · 평단 111,900원 · 비중 6.6%</div></div><div class="val"><div class="a n">6,443,800원</div><div class="p n down">-0.71%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +5.81%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">KT&amp;G<span class="cl">방어·배당</span></div><div class="meta n">34주 · 평단 173,900원 · 비중 6.0%</div></div><div class="val"><div class="a n">5,878,600원</div><div class="p n down">-0.58%</div><div class="p n down" style="font-weight:500;opacity:.75">당일 -0.75%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">알테오젠<span class="cl">바이오</span></div><div class="meta n">20주 · 평단 298,500원 · 비중 5.9%</div></div><div class="val"><div class="a n">5,790,000원</div><div class="p n down">-3.02%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +3.21%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">미래에셋생명<span class="cl">금융</span></div><div class="meta n">285주 · 평단 21,900원 · 비중 5.8%</div></div><div class="val"><div class="a n">5,677,200원</div><div class="p n down">-9.04%</div><div class="p n down" style="font-weight:500;opacity:.75">당일 -5.14%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">두산에너빌리티<span class="cl">발전 EPC</span></div><div class="meta n">69주 · 평단 79,200원 · 비중 5.6%</div></div><div class="val"><div class="a n">5,506,200원</div><div class="p n up">+0.76%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +1.40%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">HD현대일렉트릭<span class="cl">AI 전력</span></div><div class="meta n">7주 · 평단 758,000원 · 비중 5.1%</div></div><div class="val"><div class="a n">5,040,000원</div><div class="p n down">-5.01%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +2.86%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">키움증권<span class="cl">금융</span></div><div class="meta n">14주 · 평단 274,000원 · 비중 3.9%</div></div><div class="val"><div class="a n">3,794,000원</div><div class="p n down">-1.09%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +1.31%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">DB손해보험<span class="cl">방어·배당</span></div><div class="meta n">18주 · 평단 190,800원 · 비중 3.6%</div></div><div class="val"><div class="a n">3,537,000원</div><div class="p n up">+2.99%</div><div class="p n down" style="font-weight:500;opacity:.75">당일 -4.84%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">지투지바이오<span class="cl">바이오</span></div><div class="meta n">65주 · 평단 37,950원 · 비중 2.5%</div></div><div class="val"><div class="a n">2,463,500원</div><div class="p n down">-0.13%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +7.52%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">한국콜마<span class="cl">소비·수출</span></div><div class="meta n">16주 · 평단 154,900원 · 비중 2.4%</div></div><div class="val"><div class="a n">2,342,400원</div><div class="p n down">-5.49%</div><div class="p n down" style="font-weight:500;opacity:.75">당일 -2.01%</div></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm">코스메카코리아<span class="cl">소비·수출</span></div><div class="meta n">17주 · 평단 141,700원 · 비중 2.3%</div></div><div class="val"><div class="a n">2,291,600원</div><div class="p n down">-4.87%</div><div class="p n up" style="font-weight:500;opacity:.75">당일 +0.82%</div></div></div></div></div>
+  </section>
+
+  <section>
+    <h2>체결 내역</h2>
+    <p class="note">체결가는 영업일 09:05 실제 시세 · 수수료 0.015% 양방향 + 거래세 0.18% 반영</p>
+    <div class="body"><div class="rows"><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>미래에셋생명</div><div class="meta n">2026-09-03 · 171주 · 20,550원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>지투지바이오</div><div class="meta n">2026-09-02 · 65주 · 37,950원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>티엘비</div><div class="meta n">2026-09-02 · 97주 · 40,950원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>대덕전자</div><div class="meta n">2026-09-02 · 41주 · 111,400원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>효성중공업</div><div class="meta n">2026-09-02 · 1주 · 2,873,000원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>한화시스템</div><div class="meta n">2026-09-02 · 84주 · 68,400원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>코스메카코리아</div><div class="meta n">2026-09-02 · 17주 · 141,700원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>알테오젠</div><div class="meta n">2026-09-02 · 20주 · 298,500원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>한국콜마</div><div class="meta n">2026-09-02 · 16주 · 154,900원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>미래에셋생명</div><div class="meta n">2026-09-02 · 456주 · 21,900원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>산일전기</div><div class="meta n">2026-09-02 · 15주 · 191,700원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>키움증권</div><div class="meta n">2026-09-02 · 14주 · 274,000원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>두산에너빌리티</div><div class="meta n">2026-09-02 · 69주 · 79,200원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>KT&amp;G</div><div class="meta n">2026-09-02 · 34주 · 173,900원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>LG이노텍</div><div class="meta n">2026-09-02 · 8주 · 574,000원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>삼성전기</div><div class="meta n">2026-09-02 · 3주 · 1,406,000원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>삼성전자</div><div class="meta n">2026-09-02 · 27주 · 253,250원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>DB손해보험</div><div class="meta n">2026-09-02 · 18주 · 190,800원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>대한전선</div><div class="meta n">2026-09-02 · 139주 · 28,150원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>SK하이닉스</div><div class="meta n">2026-09-02 · 1주 · 1,648,000원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>티엘비</div><div class="meta n">2026-09-01 · 97주 · 40,950원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>대덕전자</div><div class="meta n">2026-09-01 · 41주 · 109,700원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>효성중공업</div><div class="meta n">2026-09-01 · 1주 · 2,889,000원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>한화시스템</div><div class="meta n">2026-09-01 · 84주 · 71,400원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>HD현대일렉트릭</div><div class="meta n">2026-09-01 · 7주 · 758,000원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>심텍</div><div class="meta n">2026-09-01 · 55주 · 125,700원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>산일전기</div><div class="meta n">2026-09-01 · 15주 · 195,500원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>LG이노텍</div><div class="meta n">2026-09-01 · 8주 · 600,000원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>LS ELECTRIC</div><div class="meta n">2026-09-01 · 34주 · 202,000원</div></div><div class="val"></div></div><div class="r" style="grid-template-columns: minmax(190px,1.1fr) minmax(150px,.8fr)"><div><div class="nm"><span class="side down">매도</span>삼성전기</div><div class="meta n">2026-09-01 · 3주 · 1,411,000원</div></div><div class="val"></div></div></div></div>
+  </section>
+
+  <footer>
+    <b>운용 방식</b> — Claude가 매 영업일 07:00에 전일 뉴스·공시·매크로를 검토하여 판단하고,
+    09:05 개장가로 체결하며, 장 마감 후 종가를 기록한다. 사람의 개입 없이 규칙과 판단으로만 운용한다.
+    한 종목 15% 이내, 최대 15종목, 현금 15% 이상, 3단계 기계 청산선.<br>
+    <b>본 페이지</b> — 실제 주문이 아닌 모의투자 기록이며, 투자 권유가 아니다.
+    종목별 판단 근거는 공개하지 않는다. 매 영업일 09:05·20:10 자동 갱신.
+  </footer>
+
+</div>
+</body>
+</html>
