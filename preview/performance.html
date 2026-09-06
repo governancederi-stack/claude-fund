@@ -1,28 +1,27 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Claude Fund · 성과 분석</title>
+<title>Claude Fund · 성과</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{color-scheme:light;
- --bg:#F2F4F6; --card:#FFFFFF; --card2:#F8F9FA;
- --ink:#191F28; --ink2:#4E5968; --ink3:#6B7684; --line:#E5E8EB;
- --up:#F04452; --down:#3182F6; --flat:#8B95A1;
- --accent:#3182F6; --accent-ink:#FFFFFF;
+ --bg:#F2F4F6; --card:#FFFFFF; --card2:#F4F6F8;
+ --ink:#191F28; --ink2:#40495A; --ink3:#5E6979; --line:#E5E8EB;
+ --up:#E5333F; --down:#1B6DE0; --flat:#5E6979;
+ --accent:#3182F6;
  --up-bg:#FDEDEE; --down-bg:#EAF2FE;
  --shadow:0 1px 3px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.05);
  --radius:20px; --radius-s:14px;}
-:root:not([data-theme="light"]){}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
- --bg:#0E1117; --card:#171C26; --card2:#1E2430;
- --ink:#ECEFF4; --ink2:#A8B0C0; --ink3:#98A2B3; --line:#252C3B;
- --up:#F45B69; --down:#5A97F7; --flat:#5E6979;
- --up-bg:#2A1A20; --down-bg:#16233A;
+ --bg:#0E1117; --card:#171C26; --card2:#202734;
+ --ink:#F2F4F8; --ink2:#C3CAD6; --ink3:#8E99AC; --line:#252C3B;
+ --up:#FF6B75; --down:#6BA1F8; --flat:#8E99AC;
+ --up-bg:#331B21; --down-bg:#17263F;
  --shadow:0 1px 3px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);}}
 :root[data-theme="dark"]{color-scheme:dark;
- --bg:#0E1117; --card:#171C26; --card2:#1E2430;
- --ink:#ECEFF4; --ink2:#A8B0C0; --ink3:#98A2B3; --line:#252C3B;
- --up:#F45B69; --down:#5A97F7; --flat:#5E6979;
- --up-bg:#2A1A20; --down-bg:#16233A;
+ --bg:#0E1117; --card:#171C26; --card2:#202734;
+ --ink:#F2F4F8; --ink2:#C3CAD6; --ink3:#8E99AC; --line:#252C3B;
+ --up:#FF6B75; --down:#6BA1F8; --flat:#8E99AC;
+ --up-bg:#331B21; --down-bg:#17263F;
  --shadow:0 1px 3px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);}
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -33,80 +32,132 @@ body{background:var(--bg);color:var(--ink);
 .up{color:var(--up)}.down{color:var(--down)}.flat{color:var(--ink3)}
 .app{max-width:640px;margin:0 auto;padding:0 20px}
 a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
-/* 상단 앱바 */
 .appbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);
  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
 .appbar-in{max-width:640px;margin:0 auto;padding:14px 20px 10px;display:flex;align-items:center;justify-content:space-between}
 .appbar b{font-size:17px;font-weight:700;letter-spacing:-.02em}
-.appbar .mini{font-size:13px;color:var(--ink3)}
+.appbar .mini{font-size:13px;color:var(--ink2);font-weight:500}
 
-/* 히어로 */
-.hero{padding:28px 0 8px}
-.hero .label{font-size:13px;color:var(--ink3);font-weight:500}
+.hero{padding:26px 0 6px}
+.hero .label{font-size:13.5px;color:var(--ink2);font-weight:500}
 .hero .total{font-size:38px;font-weight:800;letter-spacing:-.035em;line-height:1.15;margin-top:2px}
 .hero .delta{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:15px;font-weight:600}
-.hero .chip{font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px}
+.hero .chip{font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:999px}
 .chip.up{background:var(--up-bg);color:var(--up)}.chip.down{background:var(--down-bg);color:var(--down)}
-.chip.flat{background:var(--card2);color:var(--ink3)}
+.chip.flat{background:var(--card2);color:var(--ink2)}
 
-/* 카드 */
 .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin:14px 0}
-.card h2{font-size:15px;font-weight:700;letter-spacing:-.01em;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline}
-.card h2 a{font-size:12px;color:var(--ink3);font-weight:500}
+.card h2{font-size:15px;font-weight:700;margin-bottom:14px;display:flex;justify-content:space-between;align-items:baseline}
+.card h2 a{font-size:12.5px;color:var(--accent);font-weight:500}
 .kpis{display:grid;grid-template-columns:1fr 1fr;gap:2px 20px}
 .kpis>div{padding:9px 0}
-.kpis .k{font-size:12px;color:var(--ink3)}
+.kpis .k{font-size:13px;color:var(--ink2)}
 .kpis .v{font-size:17px;font-weight:700;margin-top:2px}
 
-/* 행 리스트 */
 .row{display:flex;align-items:center;gap:13px;padding:13px 0}
 .row+.row{border-top:1px solid var(--line)}
 .avatar{width:40px;height:40px;border-radius:14px;background:var(--card2);color:var(--ink2);
  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
 .row .mid{flex:1;min-width:0}
-.row .name{font-size:15px;font-weight:600;letter-spacing:-.01em}
-.row .sub{font-size:12.5px;color:var(--ink3);margin-top:1px}
+.row .name{font-size:15px;font-weight:600}
+.row .sub{font-size:13.5px;color:var(--ink2);margin-top:2px;font-weight:500}
 .row .right{text-align:right}
 .row .amt{font-size:15px;font-weight:700}
-.row .chg{font-size:12.5px;font-weight:600;margin-top:1px}
+.row .chg{font-size:13.5px;font-weight:700;margin-top:2px}
 
-/* 판단 카드 */
-.decision p{font-size:14.5px;line-height:1.75;color:var(--ink2)}
-.decision .date{font-size:12px;color:var(--ink3);margin-bottom:8px}
+.decision p{font-size:14.5px;line-height:1.78;color:var(--ink2)}
+.decision .date{font-size:12.5px;color:var(--ink3);margin-bottom:8px;font-weight:600}
 
-/* 차트 */
+/* 차트 + 비교 스탯 */
 .chart svg{width:100%;display:block}
-.seg{display:flex;background:var(--card2);border-radius:12px;padding:3px;margin-bottom:14px}
-.seg span{flex:1;text-align:center;font-size:12.5px;font-weight:600;color:var(--ink3);padding:7px 0;border-radius:9px}
-.seg .on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+.cmp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.cmp .k{font-size:12.5px;color:var(--ink2);font-weight:500}
+.cmp .v{font-size:19px;font-weight:800;margin-top:2px}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--ink2);margin-top:10px;font-weight:500;flex-wrap:wrap}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
 
-/* 체결 리스트 */
-.day{font-size:12.5px;font-weight:600;color:var(--ink3);margin:20px 0 4px}
+/* 요약/상세 토글 + 상세 표 */
+.seg{display:flex;background:var(--card2);border-radius:12px;padding:3px;margin:14px 0 2px}
+.seg button{flex:1;text-align:center;font-size:13px;font-weight:600;color:var(--ink2);padding:8px 0;border-radius:9px}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+.tblwrap{overflow-x:auto;margin:0 -22px}
+table.det th:first-child,table.det td:first-child{padding-left:22px}
+table.det th:last-child,table.det td:last-child{padding-right:22px}
+table.det{border-collapse:collapse;width:100%;min-width:560px;font-size:13.5px}
+table.det th{font-size:12px;color:var(--ink2);font-weight:600;text-align:right;padding:8px 10px;
+ border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+table.det th:first-child{text-align:left}
+table.det td{padding:10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+table.det td:first-child{text-align:left;font-weight:600}
+table.det th:first-child,table.det td:first-child{position:sticky;left:0;background:var(--card);z-index:1}
+table.det .arr{opacity:.5;font-size:10px}
+
+/* 체결 */
+.day{font-size:13px;font-weight:700;color:var(--ink2);margin:20px 0 4px}
 .trade-side{font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;margin-right:2px}
 .trade-side.buy{background:var(--up-bg);color:var(--up)}
 .trade-side.sell{background:var(--down-bg);color:var(--down)}
 details.why{margin-top:6px}
-details.why summary{font-size:12px;color:var(--ink3);cursor:pointer;list-style:none}
-details.why summary::before{content:"매매 사유 ▾ "}
-details.why[open] summary::before{content:"매매 사유 ▴ "}
-details.why p{font-size:13px;line-height:1.7;color:var(--ink2);margin-top:6px;
- background:var(--card2);border-radius:var(--radius-s);padding:12px 14px}
+details.why summary{font-size:12.5px;color:var(--ink3);cursor:pointer;list-style:none;font-weight:500}
+details.why summary::before{content:"판단 근거 ▾ "}
+details.why[open] summary::before{content:"판단 근거 ▴ "}
+details.why p{font-size:13.5px;line-height:1.75;color:var(--ink2);margin-top:6px;
+ background:var(--card2);border-radius:var(--rad-s,14px);padding:12px 14px}
 
-/* 하단 탭바 */
+/* 브리프 구조화 카드 */
+.tb-card h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.tb-star{font-size:14.5px;font-weight:600;line-height:1.65;padding-left:14px;
+ border-left:3px solid var(--accent);margin:12px 0 6px}
+.tb-fact{font-size:13.5px;color:var(--ink2);line-height:1.7;margin:5px 0 5px 17px;
+ list-style:none;position:relative;padding-left:12px}
+.tb-fact::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--ink3)}
+.tb-flow{font-size:13.5px;color:var(--ink2);line-height:1.7;margin:5px 0 5px 17px;padding-left:2px}
+.tb-flow::before{content:"→ ";color:var(--accent);font-weight:700}
+.tb-plain{font-size:14px;color:var(--ink2);line-height:1.7;margin:8px 0}
+
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;
  background:color-mix(in srgb,var(--card) 92%,transparent);
  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line)}
 .tabbar-in{max-width:640px;margin:0 auto;display:flex}
-.tab{flex:1;text-align:center;padding:9px 0 max(9px,env(safe-area-inset-bottom));font-size:10.5px;color:var(--ink3);font-weight:600}
+.tab{flex:1;text-align:center;padding:9px 0 max(9px,env(safe-area-inset-bottom));font-size:11px;color:var(--ink3);font-weight:600}
 .tab svg{display:block;margin:0 auto 3px;width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .tab.on{color:var(--ink)}
-.footnote{font-size:11.5px;color:var(--ink3);line-height:1.7;padding:18px 2px 8px}
-@media(prefers-reduced-motion:no-preference){.card{transition:transform .15s ease}.row:active,.card:active{transform:scale(.995)}}
+.footnote{font-size:12px;color:var(--ink3);line-height:1.7;padding:18px 2px 8px}
+.grid2{display:contents}
+
+/* PC: 왼쪽 사이드레일 + 2열 (사용자 보완 5) */
+@media(min-width:1080px){
+ body{padding-bottom:32px;padding-left:224px}
+ .tabbar{left:0;right:auto;top:0;bottom:0;width:224px;border-top:0;border-right:1px solid var(--line)}
+ .tabbar-in{flex-direction:column;max-width:none;padding:26px 0 0;gap:2px}
+ .tab{flex:0 0 auto;display:flex;align-items:center;gap:12px;text-align:left;
+  font-size:14px;padding:11px 26px;border-radius:0 999px 999px 0;margin-right:14px}
+ .tab svg{margin:0}
+ .tab.on{background:var(--card2)}
+ .appbar-in,.app{max-width:1024px}
+ .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;align-items:start}
+ .grid2 .card{margin:8px 0}
+ .grid2 .span2{grid-column:1/-1}
+}
+@media(prefers-reduced-motion:no-preference){.card{transition:transform .15s ease}.row:active{transform:scale(.995)}}
 </style></head><body>
 <div class="appbar"><div class="appbar-in"><b>Claude Fund</b><span class="mini n">2026-09-04 종가 · 미리보기</span></div></div>
-<main class="app"><div class="hero"><h1 style="font-size:26px">성과 분석</h1></div><section class="card"><p>기간별 손익과 지수 대비 성과</p><a class="row" href="../performance.html">성과 분석 보기 →</a></section>
-<footer class="footnote"><p>모의투자 · 초기 자금 1억 원 · 투자 권유가 아닙니다.</p><details><summary>손익 계산 안내</summary><p>총손익은 매수 수수료를 포함합니다. 실현손익과 평가손익의 합계에서는 매수 수수료가 빠져 있습니다.</p></details></footer>
+<main class="app">
+<div class="hero"><div class="label">성과</div>
+<div class="total n down" style="font-size:32px">-1.71%</div>
+<div class="delta n"><span class="chip up">KOSPI 대비 +0.24%p</span></div></div>
+<div class="grid2">
+<section class="card chart span2"><h2>누적 수익률 — 펀드 vs KOSPI</h2><div class="cmp"><div><div class="k">펀드</div><div class="v n down">-1.71%</div></div><div><div class="k">KOSPI</div><div class="v n down">-1.95%</div></div><div><div class="k">시장 대비</div><div class="v n up">+0.24%p</div></div></div><svg viewBox="0 0 600 200" role="img" aria-label="펀드와 KOSPI 누적 수익률 비교, 2026-08-31부터 2026-09-04까지. 펀드 -1.71%, KOSPI -1.95%, 시장 대비 +0.24%포인트"><line x1="12" x2="588" y1="40.3" y2="40.3" stroke="var(--line)" stroke-dasharray="3 5"/><polygon points="12.0,40.3 156.0,75.3 300.0,118.3 444.0,127.3 588.0,91.2 588.0,40.3 12.0,40.3" fill="var(--down)" opacity=".07"/><polyline points="12.0,40.3 156.0,33.4 300.0,152.6 444.0,145.2 588.0,98.3" fill="none" stroke="var(--flat)" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/><polyline points="12.0,40.3 156.0,75.3 300.0,118.3 444.0,127.3 588.0,91.2" fill="none" stroke="var(--down)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="588.0" cy="91.2" r="4.5" fill="var(--down)"/><text x="12" y="194" fill="var(--ink3)" font-size="11">08-31</text><text x="588" y="194" text-anchor="end" fill="var(--ink3)" font-size="11">09-04</text></svg><div class="legend"><span><i style="background:var(--down)"></i>펀드</span><span><i style="background:var(--flat)"></i>KOSPI</span><span style="margin-left:auto">설정일 2026-08-31 = 0% 기준</span></div></section>
+<section class="card"><h2>일별 손익</h2><div class="row"><div class="mid"><div class="name n">2026-09-04</div><div class="sub n">총 98,290,580원 · 누적 -1.71%</div></div><div class="right"><div class="amt n up">+1,213,550원</div></div></div><div class="row"><div class="mid"><div class="name n">2026-09-03</div><div class="sub n">총 97,077,030원 · 누적 -2.92%</div></div><div class="right"><div class="amt n down">-302,452원</div></div></div><div class="row"><div class="mid"><div class="name n">2026-09-02</div><div class="sub n">총 97,379,482원 · 누적 -2.62%</div></div><div class="right"><div class="amt n down">-1,446,318원</div></div></div></section>
+<section class="card"><h2>비용</h2><div class="kpis">
+<div><div class="k">누적 거래비용</div><div class="v n">105,820원</div></div>
+<div><div class="k">실현손익 (비용 차감)</div><div class="v n down">-922,062원</div></div>
+</div></section>
+</div>
+<p class="footnote">총손익에는 매수 수수료가 포함되어 실현+평가 합계와 다를 수 있습니다.
+모의투자 기록이며 투자 권유가 아닙니다. 시드 1억 원 · Claude가 매 영업일 판단·체결합니다.</p>
 </main>
-<nav class="tabbar"><div class="tabbar-in"><a class="tab" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>홈</a><a class="tab on" aria-current="page" href="performance.html"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15l3.5-4 2.5 2 4.5-5.5"/></svg>성과</a><a class="tab" href="holdings.html"><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="5" cy="18" r="1"/><path d="M9 6h11M9 12h11M9 18h11"/></svg>보유</a><a class="tab" href="trades.html"><svg viewBox="0 0 24 24"><path d="M7 4v13M7 4 4 7m3-3 3 3"/><path d="M17 20V7m0 13 3-3m-3 3-3-3"/></svg>체결</a><a class="tab" href="brief.html"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 12h7M9 16h7"/></svg>브리프</a></div></nav>
+<nav class="tabbar" aria-label="주 메뉴"><div class="tabbar-in"><a class="tab" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>홈</a><a class="tab on" aria-current="page" href="performance.html"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15l3.5-4 2.5 2 4.5-5.5"/></svg>성과</a><a class="tab" href="holdings.html"><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="5" cy="18" r="1"/><path d="M9 6h11M9 12h11M9 18h11"/></svg>보유</a><a class="tab" href="trades.html"><svg viewBox="0 0 24 24"><path d="M7 4v13M7 4 4 7m3-3 3 3"/><path d="M17 20V7m0 13 3-3m-3 3-3-3"/></svg>체결</a><a class="tab" href="brief.html"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 12h7M9 16h7"/></svg>브리프</a></div></nav>
 </body></html>
