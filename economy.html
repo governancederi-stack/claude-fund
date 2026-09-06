@@ -293,7 +293,19 @@ table.det td{padding:10px;text-align:right;border-bottom:1px solid var(--line);w
 table.det td:first-child{text-align:left;font-weight:600}
 table.det th:first-child,table.det td:first-child{position:sticky;left:0;background:var(--card);z-index:1;padding-left:22px}
 table.det th:last-child,table.det td:last-child{padding-right:22px}
-table.det .arr{opacity:.5;font-size:10px}
+table.det .arr{opacity:.6;font-size:10px}
+table.det .sortbtn{font:inherit;font-weight:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;white-space:nowrap}
+table.det .sortbtn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+table.det th[aria-sort="ascending"],table.det th[aria-sort="descending"]{color:var(--accent)}
+details.foldcard{padding:0}
+details.foldcard>summary{list-style:none;cursor:pointer;padding:18px 22px;display:block}
+details.foldcard>summary::-webkit-details-marker{display:none}
+details.foldcard>summary>span{font-size:15px;font-weight:700;display:block;position:relative;padding-right:22px}
+details.foldcard>summary>span::after{content:"＋";position:absolute;right:0;color:var(--accent);font-weight:500}
+details.foldcard[open]>summary>span::after{content:"−"}
+details.foldcard>summary>small{display:block;font-size:12.5px;color:var(--ink3);margin-top:4px;font-weight:500;line-height:1.6}
+details.foldcard .foldbody{padding:0 22px 20px}
+details.foldcard>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:var(--radius)}
 table.det td small{display:block;font-size:11px;color:var(--ink3);font-weight:400}
 table.det tfoot td{font-weight:700;background:var(--card)}
 
@@ -304,8 +316,8 @@ table.det tfoot td{font-weight:700;background:var(--card)}
 .headline{font-size:13.5px;line-height:1.75;color:var(--ink2);margin-top:6px}
 details.why{margin-top:6px}
 details.why summary{font-size:12.5px;color:var(--accent);cursor:pointer;list-style:none;font-weight:500}
-details.why summary::before{content:"원칙·근거·보완 ▾"}
-details.why[open] summary::before{content:"원칙·근거·보완 ▴"}
+details.why summary::before{content:"매매 사유 ▾"}
+details.why[open] summary::before{content:"매매 사유 ▴"}
 details.why .trade-reason{background:var(--card2);border-radius:var(--radius-s);padding:12px 14px;margin-top:8px}
 .trade-tools{display:flex;gap:10px;margin:14px 0 4px;flex-wrap:wrap}
 .trade-tools input,.trade-tools select{font:inherit;font-size:13.5px;background:var(--card);color:var(--ink);

@@ -293,7 +293,19 @@ table.det td{padding:10px;text-align:right;border-bottom:1px solid var(--line);w
 table.det td:first-child{text-align:left;font-weight:600}
 table.det th:first-child,table.det td:first-child{position:sticky;left:0;background:var(--card);z-index:1;padding-left:22px}
 table.det th:last-child,table.det td:last-child{padding-right:22px}
-table.det .arr{opacity:.5;font-size:10px}
+table.det .arr{opacity:.6;font-size:10px}
+table.det .sortbtn{font:inherit;font-weight:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;white-space:nowrap}
+table.det .sortbtn:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+table.det th[aria-sort="ascending"],table.det th[aria-sort="descending"]{color:var(--accent)}
+details.foldcard{padding:0}
+details.foldcard>summary{list-style:none;cursor:pointer;padding:18px 22px;display:block}
+details.foldcard>summary::-webkit-details-marker{display:none}
+details.foldcard>summary>span{font-size:15px;font-weight:700;display:block;position:relative;padding-right:22px}
+details.foldcard>summary>span::after{content:"＋";position:absolute;right:0;color:var(--accent);font-weight:500}
+details.foldcard[open]>summary>span::after{content:"−"}
+details.foldcard>summary>small{display:block;font-size:12.5px;color:var(--ink3);margin-top:4px;font-weight:500;line-height:1.6}
+details.foldcard .foldbody{padding:0 22px 20px}
+details.foldcard>summary:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:var(--radius)}
 table.det td small{display:block;font-size:11px;color:var(--ink3);font-weight:400}
 table.det tfoot td{font-weight:700;background:var(--card)}
 
@@ -304,8 +316,8 @@ table.det tfoot td{font-weight:700;background:var(--card)}
 .headline{font-size:13.5px;line-height:1.75;color:var(--ink2);margin-top:6px}
 details.why{margin-top:6px}
 details.why summary{font-size:12.5px;color:var(--accent);cursor:pointer;list-style:none;font-weight:500}
-details.why summary::before{content:"원칙·근거·보완 ▾"}
-details.why[open] summary::before{content:"원칙·근거·보완 ▴"}
+details.why summary::before{content:"매매 사유 ▾"}
+details.why[open] summary::before{content:"매매 사유 ▴"}
 details.why .trade-reason{background:var(--card2);border-radius:var(--radius-s);padding:12px 14px;margin-top:8px}
 .trade-tools{display:flex;gap:10px;margin:14px 0 4px;flex-wrap:wrap}
 .trade-tools input,.trade-tools select{font:inherit;font-size:13.5px;background:var(--card);color:var(--ink);
@@ -404,7 +416,7 @@ section>h2:before{display:none}
 <div class="appbar"><div class="appbar-in"><b>Claude Fund</b><span class="mini n">2026-09-04 종가 · 모의투자</span></div></div>
 <main class="app">
 <div class="hero"><div class="label">총 평가자산</div>
-<div class="total n">98,290,580원</div>
+<h1 class="total n">98,290,580원</h1>
 <div class="delta n down">-1,709,420원 (-1.71%) <span class="chip up">전일 대비 +1,213,550원 (+1.25%)</span></div></div>
 <div class="grid2">
 <section class="card chart span2" id="overview"><h2>KOSPI와 비교<a href="performance.html">상세 성과</a></h2>
@@ -413,15 +425,13 @@ section>h2:before{display:none}
 <div><div class="k">실현손익 <small>매도분 · 비용 차감</small></div><div class="v n down">-922,062원</div></div>
 <div><div class="k">평가손익 <small>보유분 · 매수비용 포함</small></div><div class="v n down">-787,358원</div></div>
 <div><div class="k">최대 낙폭</div><div class="v n down">-2.92%</div></div>
-<div><div class="k">상위 3종목 비중</div><div class="v n">22.4%</div></div>
 <div><div class="k">현금 비중</div><div class="v n">21.4%</div></div>
-<div><div class="k">보유 종목</div><div class="v n">15개</div></div>
-<div><div class="k">운용 기간</div><div class="v n">4거래일</div></div>
-<div><div class="k">누적 거래비용</div><div class="v n">105,820원 <small>원금 대비 0.11%p</small></div></div>
-</div></section>
-<section class="card"><h2>비중 상위<a href="holdings.html">전체 보기</a></h2><a class="row" href="holdings.html"><div class="avatar">S</div><div class="mid"><div class="name">SK하이닉스</div><div class="sub n">8.5%</div></div><div class="right"><div class="amt n">8,310,000원</div><div class="chg n up">+0.29%</div></div></a><a class="row" href="holdings.html"><div class="avatar">디</div><div class="mid"><div class="name">디아이</div><div class="sub n">7.2%</div></div><div class="right"><div class="amt n">7,044,800원</div><div class="chg n up">+17.77%</div></div></a><a class="row" href="holdings.html"><div class="avatar">L</div><div class="mid"><div class="name">LS ELECTRIC</div><div class="sub n">6.8%</div></div><div class="right"><div class="amt n">6,677,600원</div><div class="chg n down">-2.79%</div></div></a></section>
-<section class="card"><h2>시장 브리프 주제<a href="brief.html">브리프 읽기</a></h2><div class="tb-fact" style="margin-left:0">핵심 3줄</div><div class="tb-fact" style="margin-left:0">💰 금리·인상</div><div class="tb-fact" style="margin-left:0">🏥 반도체 공급망</div><div class="tb-fact" style="margin-left:0">💻 AI 추론 경제성</div>
-<div style="border-top:1px solid var(--line);margin-top:12px"><a class="row" href="https://n.news.naver.com/mnews/article/023/0003996934" target="_blank" rel="noopener noreferrer"><div class="mid"><div class="name" style="font-size:14px;line-height:1.6">[단독]개미들, 증시 급락에 반대매매 후 남은 빚도 급증…1년 전보다...</div><div class="sub">SK하이닉스 · 키움증권</div></div></a><a class="row" href="https://n.news.naver.com/mnews/article/032/0003468734" target="_blank" rel="noopener noreferrer"><div class="mid"><div class="name" style="font-size:14px;line-height:1.6">재정 풀고 금리 올리면 엇박자?…관건은 ‘예산 쓰임새’</div><div class="sub">키움증권</div></div></a><a class="row" href="https://n.news.naver.com/mnews/article/030/0003464026" target="_blank" rel="noopener noreferrer"><div class="mid"><div class="name" style="font-size:14px;line-height:1.6">퇴직연금, 주식 몰빵은 불안한데…“수익은 내야” ETF에 몰리면서 60...</div><div class="sub">SK하이닉스</div></div></a></div></section>
+</div>
+<p class="trade-count" style="margin-top:10px">보유 15종목 · 상위 3종목 22.4% ·
+운용 4거래일 · 누적 거래비용 105,820원(원금 대비 0.11%p)</p></section>
+<section class="card"><h2>주요 보유종목<a href="holdings.html">전체 보기</a></h2><a class="row" href="holdings.html"><div class="avatar">S</div><div class="mid"><div class="name">SK하이닉스</div><div class="sub n">8.5%</div></div><div class="right"><div class="amt n">8,310,000원</div><div class="chg n up">+0.29%</div></div></a><a class="row" href="holdings.html"><div class="avatar">디</div><div class="mid"><div class="name">디아이</div><div class="sub n">7.2%</div></div><div class="right"><div class="amt n">7,044,800원</div><div class="chg n up">+17.77%</div></div></a><a class="row" href="holdings.html"><div class="avatar">L</div><div class="mid"><div class="name">LS ELECTRIC</div><div class="sub n">6.8%</div></div><div class="right"><div class="amt n">6,677,600원</div><div class="chg n down">-2.79%</div></div></a></section>
+<section class="card"><h2>주요 이슈<a href="brief.html">브리프 읽기</a></h2><div class="tb-fact" style="margin-left:0">금리·인상</div><div class="tb-fact" style="margin-left:0">반도체 공급망</div><div class="tb-fact" style="margin-left:0">AI 추론 경제성</div><div class="tb-fact" style="margin-left:0">이란 제재 확대</div>
+<div style="border-top:1px solid var(--line);margin-top:12px"><a class="row" href="https://n.news.naver.com/mnews/article/018/0006364575" target="_blank" rel="noopener noreferrer"><div class="mid"><div class="name" style="font-size:14px;line-height:1.6">AI가 메모리까지 빨아들였다…스마트폰·PC 덮친 ‘램 대란’</div><div class="sub">SK하이닉스</div></div></a><a class="row" href="https://n.news.naver.com/mnews/article/011/0004659071" target="_blank" rel="noopener noreferrer"><div class="mid"><div class="name" style="font-size:14px;line-height:1.6">“하닉 믿고 샀는데” ‘218만원→94만원’ 주가 반토막…‘이 주식’...</div><div class="sub">SK하이닉스</div></div></a><a class="row" href="https://n.news.naver.com/mnews/article/023/0003996934" target="_blank" rel="noopener noreferrer"><div class="mid"><div class="name" style="font-size:14px;line-height:1.6">[단독] 반대매매로 털고도 빚 못 갚아… 개미들 미상환금 1년 새 5배</div><div class="sub">SK하이닉스 · 키움증권</div></div></a></div></section>
 <section class="card span2"><h2>더 보기</h2><div class="quick">
 <a href="economy.html">경제지표 발표</a><a href="etfs.html">액티브 ETF 비교</a><a href="brief.html#index-events">지수 편출입</a>
 </div></section>
