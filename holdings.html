@@ -247,7 +247,7 @@ body{font-size:15px;word-break:keep-all;overflow-wrap:break-word}.wrap{max-width
   </footer></details>
 </div>
 <script>
-const rows=[...document.querySelectorAll('#trades .r')],search=document.querySelector('#trade-search'),side=document.querySelector('#trade-side');
+const rows=[...document.querySelectorAll('#trades .r.public-row')],search=document.querySelector('#trade-search'),side=document.querySelector('#trade-side');
 let currentPage=1;const pageSize=10;
 function showTrades(reset=false){if(!search)return;if(reset)currentPage=1;const q=search.value.trim().toLowerCase();const matches=rows.filter(r=>r.querySelector('.nm').textContent.toLowerCase().includes(q)&&(!side.value||r.querySelector('.side').textContent===side.value));const pages=Math.max(1,Math.ceil(matches.length/pageSize));currentPage=Math.min(currentPage,pages);rows.forEach(r=>r.hidden=true);matches.slice((currentPage-1)*pageSize,currentPage*pageSize).forEach(r=>r.hidden=false);document.querySelector('#trade-count').textContent=`전체 ${rows.length}건 중 ${matches.length}건 · ${currentPage}/${pages} 페이지`;document.querySelector('#trade-prev').disabled=currentPage===1;document.querySelector('#trade-next').disabled=currentPage===pages;}
 if(search){search.addEventListener('input',()=>showTrades(true));side.addEventListener('change',()=>showTrades(true));document.querySelector('#trade-prev').addEventListener('click',()=>{currentPage--;showTrades()});document.querySelector('#trade-next').addEventListener('click',()=>{currentPage++;showTrades()});showTrades()}

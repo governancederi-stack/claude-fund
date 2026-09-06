@@ -237,7 +237,7 @@ body{font-size:15px;word-break:keep-all;overflow-wrap:break-word}.wrap{max-width
 <div><div class="k">최대 낙폭</div><div class="v n down">-2.92%</div><small>설정 이후 · 종가 기준</small></div>
 <div><div class="k">상위 3종목 비중</div><div class="v n">22.4%</div><small>총자산 대비 집중도</small></div>
 </div>
-<div class="timing"><span>설정 2026-09-01 · 운용 4거래일</span><span>누적 거래비용 105,820원 · 원금 대비 0.11%p</span><span>생성 2026-09-06 15:00 KST</span></div>
+<div class="timing"><span>설정 2026-09-01 · 운용 4거래일</span><span>누적 거래비용 105,820원 · 원금 대비 0.11%p</span><span>생성 2026-09-06 15:05 KST</span></div>
 
 
 
@@ -261,7 +261,7 @@ body{font-size:15px;word-break:keep-all;overflow-wrap:break-word}.wrap{max-width
   </footer></details>
 </div>
 <script>
-const rows=[...document.querySelectorAll('#trades .r')],search=document.querySelector('#trade-search'),side=document.querySelector('#trade-side');
+const rows=[...document.querySelectorAll('#trades .r.public-row')],search=document.querySelector('#trade-search'),side=document.querySelector('#trade-side');
 let currentPage=1;const pageSize=10;
 function showTrades(reset=false){if(!search)return;if(reset)currentPage=1;const q=search.value.trim().toLowerCase();const matches=rows.filter(r=>r.querySelector('.nm').textContent.toLowerCase().includes(q)&&(!side.value||r.querySelector('.side').textContent===side.value));const pages=Math.max(1,Math.ceil(matches.length/pageSize));currentPage=Math.min(currentPage,pages);rows.forEach(r=>r.hidden=true);matches.slice((currentPage-1)*pageSize,currentPage*pageSize).forEach(r=>r.hidden=false);document.querySelector('#trade-count').textContent=`전체 ${rows.length}건 중 ${matches.length}건 · ${currentPage}/${pages} 페이지`;document.querySelector('#trade-prev').disabled=currentPage===1;document.querySelector('#trade-next').disabled=currentPage===pages;}
 if(search){search.addEventListener('input',()=>showTrades(true));side.addEventListener('change',()=>showTrades(true));document.querySelector('#trade-prev').addEventListener('click',()=>{currentPage--;showTrades()});document.querySelector('#trade-next').addEventListener('click',()=>{currentPage++;showTrades()});showTrades()}
