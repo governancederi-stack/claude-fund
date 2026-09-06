@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-
-<html lang="ko">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>시장 브리프 | Claude Fund</title>
-<meta content="Claude가 운용하는 시드 1억원 한국주식 모의투자 — 매일 아침 판단, 실제 시세 모의 체결, 종가 기록" name="description"/>
+<meta name="description" content="Telebrief 핵심 요약과 보유종목 관련 뉴스">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
-
 :root {
   color-scheme: light;
   --page:   #ffffff;
@@ -200,67 +196,229 @@ nav{position:sticky;top:0;z-index:5;background:var(--page);padding:0;gap:26px;bo
 @media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}}
 
 
+/* ══ 앱 토큰 + 레거시 브리지: 아래 정의가 스냅샷·컴포넌트 CSS보다 뒤에 와서 이긴다 ══ */
+:root{color-scheme:light;
+ --bg:#F2F4F6; --card:#FFFFFF; --card2:#F4F6F8;
+ --ink:#191F28; --ink2:#40495A; --ink3:#5E6979; --line:#E5E8EB;
+ --up:#E5333F; --down:#1B6DE0; --flat:#5E6979;
+ --accent:#3182F6;
+ --up-bg:#FDEDEE; --down-bg:#EAF2FE;
+ --shadow:0 1px 3px rgba(0,0,0,.04),0 6px 16px rgba(0,0,0,.05);
+ --radius:20px; --radius-s:14px;
+ --page:var(--bg); --sunken:var(--card2); --rule:var(--line);
+ --ink-2:var(--ink2); --ink-3:var(--ink3);}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;
+ --bg:#0E1117; --card:#171C26; --card2:#202734;
+ --ink:#F2F4F8; --ink2:#C3CAD6; --ink3:#8E99AC; --line:#252C3B;
+ --up:#FF6B75; --down:#6BA1F8; --flat:#8E99AC;
+ --up-bg:#331B21; --down-bg:#17263F;
+ --shadow:0 1px 3px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+ --accent:#5C9DF8;
+ --page:var(--bg); --sunken:var(--card2); --rule:var(--line);
+ --ink-2:var(--ink2); --ink-3:var(--ink3);}}
+:root[data-theme="dark"]{color-scheme:dark;
+ --bg:#0E1117; --card:#171C26; --card2:#202734;
+ --ink:#F2F4F8; --ink2:#C3CAD6; --ink3:#8E99AC; --line:#252C3B;
+ --up:#FF6B75; --down:#6BA1F8; --flat:#8E99AC;
+ --up-bg:#331B21; --down-bg:#17263F;
+ --shadow:0 1px 3px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+ --accent:#5C9DF8;
+ --page:var(--bg); --sunken:var(--card2); --rule:var(--line);
+ --ink-2:var(--ink2); --ink-3:var(--ink3);}
 
-body{font-size:15px;word-break:keep-all;overflow-wrap:break-word}.wrap{max-width:1220px}.page-heading{padding:38px 0 24px;border-bottom:2px solid var(--accent)}.page-heading h1{font-size:1.65rem;font-weight:650;margin:8px 0}.page-heading p{font-size:.85rem;color:var(--ink-2);line-height:1.7}.page-kicker{font-size:.65rem;letter-spacing:.1em;color:var(--ink-3)}section{padding:26px 0}section h2{font-size:1rem}.note{line-height:1.8;max-width:90ch}.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:28px 0}.home-card{border:1px solid var(--line);padding:24px;min-width:0}.home-card h2{font-size:1rem;margin:0 0 16px}.home-card p,.home-card li{font-size:.87rem;line-height:1.85}.home-card ul{padding-left:18px}.home-card a{display:inline-block;margin-top:14px;font-size:.78rem}.home-card.wide{grid-column:1/-1}.home-links{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.home-links a{padding:16px;border:1px solid var(--line);text-decoration:none;margin:0}.trade-reason{margin-top:12px}.trade-review{grid-column:1/-1;margin-top:8px}.trade-review summary{font-size:.78rem;color:var(--accent);padding:8px 0}.trade-headline{grid-column:1/-1;font-size:.83rem;line-height:1.8;color:var(--ink-2);margin-top:10px;max-width:85ch}.pagination{display:flex;gap:10px;margin:18px 0}.pagination button:disabled{opacity:.4;cursor:default}.r{padding:18px 0}.analyst-views{grid-template-columns:1fr}.analyst-views article{padding:20px;max-width:90ch}.analyst-views h4{font-size:.9rem}.analyst-views p,.event-reading p{font-size:.87rem;line-height:1.95;max-width:90ch}.economic-review{padding:22px}.trade-reason dd{font-size:.85rem}.footer-detail{font-size:.72rem;line-height:1.8;margin:24px 0}.footer-detail summary{cursor:pointer}.page-nav{overflow-x:auto;flex-wrap:nowrap;gap:18px}.page-nav a{font-size:.74rem}.tele-lead li{font-size:.9rem;line-height:1.95}.event-reading{max-width:95ch}.macro-detail{margin-top:18px}.section-extra{margin-top:18px}.section-extra>summary{font-size:.8rem;color:var(--ink-2);padding:10px 0}.home-chart svg{max-height:210px}body[data-page="index.html"] .strip{grid-template-columns:repeat(4,minmax(0,1fr))}body[data-page="index.html"] .strip>div:nth-child(n+5){display:none}
-@media(max-width:700px){.home-grid{grid-template-columns:1fr;gap:14px}.home-card{padding:18px}.home-card.wide{grid-column:auto}.home-links{grid-template-columns:1fr 1fr}.page-heading{padding-top:24px}.page-heading h1{font-size:1.4rem}.economic-review{padding:14px}body[data-page="index.html"] .strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* ══ 셸 ══ */
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);
+ font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+ font-size:15px;line-height:1.5;word-break:keep-all;overflow-wrap:break-word;
+ margin:0;padding:0 0 88px;letter-spacing:normal}
+.n{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.up{color:var(--up)}.down{color:var(--down)}.flat{color:var(--ink3)}
+.app{max-width:680px;margin:0 auto;padding:0 20px}
+a{color:inherit;text-decoration:none}
+.legacy a{color:var(--accent);text-underline-offset:4px}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;border-radius:0;padding:0;max-width:none}
 
-:root{--space:24px;--bg:var(--page);--surface:var(--sunken)}body{padding-left:0!important;font-size:15px;line-height:1.65}.wrap{max-width:1280px;padding:36px 36px 56px;margin-left:224px}.sidebar{position:fixed;left:0;top:0;bottom:0;box-sizing:border-box;width:224px;padding:28px 18px;display:flex;flex-direction:column;gap:24px}.sidebar-brand{padding:0 12px;font-size:16px;letter-spacing:.03em}.sidebar nav{margin-top:0;display:flex;flex-direction:column;gap:4px}.sidebar nav .nav-group{margin:0;font-size:11px;letter-spacing:.08em;color:var(--ink-3);padding:20px 12px 6px}.sidebar nav .nav-group:first-child{padding-top:0}.sidebar nav a{display:block;padding:11px 12px;font-size:14px;border:0;border-radius:6px;text-decoration:none}.sidebar nav a.active{background:var(--bg);box-shadow:inset 3px 0 var(--accent);font-weight:650}.sidebar-status{position:static;margin-top:auto;padding:16px 12px 0;border-top:1px solid var(--line)}.page-heading{padding:0 0 24px;margin-bottom:8px;border-bottom:1px solid var(--line)}.page-heading h1{font-size:28px;line-height:1.3;margin:8px 0 10px}.page-heading p{font-size:14px;margin:0}.page-kicker{font-size:11px}section{padding:24px 0;margin:0}section h2{font-size:18px;margin:0 0 12px}.note{font-size:13px!important;line-height:1.8;color:var(--ink-2);margin:10px 0 18px}small{line-height:1.6}.home-grid{gap:20px;margin:24px 0}.home-card{padding:24px;border-radius:8px}.home-card h2{font-size:17px}.home-card p,.home-card li{font-size:15px;line-height:1.8}.home-card li+li{margin-top:14px}.home-card a{font-size:13px}.home-card.home-chart{order:-1}.home-chart svg{max-height:240px}.home-links{padding:0;border:0;gap:12px}.home-links a{border-radius:6px;padding:14px 18px}.mast{padding-top:8px;padding-bottom:24px}.mast .big{font-size:40px}.strip{padding:16px 0;gap:20px}.strip>div{padding:10px 0}.strip .k{font-size:12px}.strip .v{font-size:20px}.timing{padding:14px 0;gap:12px;line-height:1.7}.holdings-table{font-size:13px}.holdings-table td,.holdings-table th{padding:14px 10px}.holdings-table tbody tr:hover{background:var(--surface)}.holdings-table small{font-size:11px}.factor-jump{display:block;font-size:12px;margin-top:6px;color:var(--accent)}.section-extra{margin:8px 0;border-bottom:1px solid var(--line)}.section-extra>summary{padding:14px 4px;font-size:14px;cursor:pointer}.section-extra[open]{padding-bottom:18px}.section-extra table{width:100%;min-width:0;table-layout:fixed;font-size:14px}.section-extra table th,.section-extra table td{min-width:0;white-space:normal;overflow-wrap:anywhere}.section-extra th,.section-extra td{padding:10px;text-align:left;border-bottom:1px solid var(--line)}.section-extra th{font-weight:500;width:60%}.section-extra p{font-size:14px}.factor-list{margin-top:16px}.factor-list>summary{font-weight:600}.factor-list>.section-extra{margin:0 0 0 8px}.content-switch{display:flex;gap:8px;margin:24px 0 0;flex-wrap:wrap}.content-switch button,.table-toggle{font:inherit;font-size:13px;cursor:pointer;background:transparent;color:var(--ink-2);border:1px solid var(--line);border-radius:6px;padding:10px 14px;min-height:44px}.content-switch button[aria-pressed=true]{background:var(--accent);color:var(--bg);border-color:var(--accent)}[hidden]{display:none!important}.tele-lead li,.analyst-views p,.event-reading p,.trade-headline,.trade-reason dd{font-size:15px;line-height:1.85}.tele-lead{gap:20px}.tele-lead>div{padding:20px}.economic-review{padding:24px;border-radius:8px}.analyst-views article{padding:20px;border-radius:6px}.related-news li{padding:16px 0}.news-date{font-size:12px!important}.related-news a{font-size:14px!important;line-height:1.75}.trade-review summary{font-size:13px;min-height:44px;padding:12px 0}.footer-detail{margin-top:24px;padding-top:16px;border-top:1px solid var(--line);font-size:13px}.footer-detail footer{border:0;margin:0}.table-toggle,.mobile-menu{display:none}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}section,details[id]{scroll-margin-top:80px}
-@media(min-width:901px){.mobile-menu{display:none!important}}
-@media(max-width:900px){.sidebar{display:none}.wrap{margin:0;padding:24px 24px 40px;max-width:none}.mobile-menu{display:block;position:sticky;top:0;z-index:50;padding:0 20px;background:var(--bg);border-bottom:1px solid var(--line)}.mobile-menu>summary{min-height:56px;display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:650;cursor:pointer;list-style:none}.mobile-menu>summary:after{content:'메뉴 ☰';font-size:12px;font-weight:400}.mobile-menu[open]>summary:after{content:'닫기 ×'}.mobile-menu .page-nav{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:0 0 16px;border:0;white-space:normal}.mobile-menu .page-nav a{padding:10px;font-size:14px;border-radius:4px}.mobile-menu .page-nav .active{background:var(--surface);font-weight:650}.page-heading{padding-top:4px}.home-card.home-chart{order:0}}
-@media(max-width:700px){.wrap{padding:20px 18px 32px}.page-heading h1{font-size:25px}.home-card{padding:20px}.home-grid{gap:16px;margin-top:20px}.home-card p,.home-card li{font-size:14px}.home-links{padding:0}.home-links a{font-size:13px}.note{font-size:13px!important}.table-toggle{display:inline-flex;margin:4px 0 14px}.holdings-table:not(.all-columns){min-width:0!important;width:100%;table-layout:fixed;font-size:12px}.holdings-table:not(.all-columns) tr>:nth-child(2),.holdings-table:not(.all-columns) tr>:nth-child(3),.holdings-table:not(.all-columns) tr>:nth-child(4),.holdings-table:not(.all-columns) tr>:nth-child(5),.holdings-table:not(.all-columns) tr>:nth-child(6),.holdings-table:not(.all-columns) tr>:nth-child(8){display:none}.holdings-table:not(.all-columns) tr>:first-child{width:31%;white-space:normal;position:static}.holdings-table:not(.all-columns) tr>:nth-child(7){width:29%}.holdings-table:not(.all-columns) tr>:nth-child(9){width:23%}.holdings-table:not(.all-columns) tr>:nth-child(10){width:17%}.holdings-table:not(.all-columns) th,.holdings-table:not(.all-columns) td{padding:12px 4px}.holdings-table:not(.all-columns) tfoot{display:none}.holdings-table .sort-column{font-size:11px;white-space:normal;padding:8px 0}.holdings-table.all-columns{min-width:1060px}.factor-jump{font-size:11px}.section-extra>summary{font-size:14px;padding:14px 0}.economic-review{padding:16px}.content-switch{margin-top:20px;gap:6px}.content-switch button{padding:9px 12px}.home-chart svg text{font-size:12px}.strip{gap:16px}.strip .v{font-size:18px}.tele-lead li{font-size:14px}.tele-lead>div{padding:16px}.analyst-views p,.event-reading p{font-size:14px}}
+.appbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);
+ backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.appbar-in{max-width:680px;margin:0 auto;padding:14px 20px 10px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.appbar b{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.appbar .mini{font-size:12.5px;color:var(--ink2);font-weight:500;text-align:right}
 
-/* Korean prose uses word boundaries; only an overlong token may break. */
-.readable-prose,.note,.tele-topic summary,.related-news a,.kr-exposure li,.event-reading,.analyst-views{word-break:keep-all;overflow-wrap:anywhere;white-space:normal;text-align:left;line-break:strict}.readable-prose{max-width:72ch;line-height:1.9!important;letter-spacing:0}.prose-paragraph{display:block}.prose-paragraph+.prose-paragraph{margin-top:12px}.tele-lead{grid-template-columns:1fr!important;gap:16px}.tele-lead article{padding:20px 24px}.tele-lead ul,.tele-topic ul{padding-left:20px;margin:12px 0 0}.tele-lead li,.tele-topic li{font-size:15px;line-height:1.9;font-weight:400;padding:0;margin:0 0 16px}.tele-lead .mainpoint{border-left:0;padding-left:0}.tele-topics{grid-template-columns:1fr!important;gap:0}.tele-topic{padding:14px 0}.tele-topic>summary{font-size:15px;line-height:1.7}.tele-topic ul{max-width:78ch;margin-top:18px}.tele-topic .subpoint{margin-left:16px;color:var(--ink-2);font-size:14px}.trade-reason dd{white-space:normal}.analyst-views article{max-width:80ch}.event-reading{max-width:80ch;padding:22px}.event-reading h4{margin-top:22px;margin-bottom:12px}.event-reading h4:first-child{margin-top:0}.readable-prose{margin-top:12px;margin-bottom:16px}.tele-lead .readable-prose,.tele-topic .readable-prose{margin-top:0}.note{max-width:80ch}.related-news a{display:block!important;margin-top:8px!important}.home-card li>a{display:inline!important;word-break:keep-all;overflow-wrap:anywhere}.home-card small{display:block;margin-top:6px}.kr-exposure li{margin-bottom:12px;max-width:80ch}
-@media(max-width:700px){.tele-lead article{padding:18px 16px}.tele-lead li,.tele-topic li{font-size:15px;line-height:1.9;margin-bottom:18px}.tele-lead ul,.tele-topic ul{padding-left:18px}.tele-topic .subpoint{margin-left:8px}.event-reading{padding:18px 16px}.readable-prose{font-size:15px!important;line-height:1.9!important}.prose-paragraph+.prose-paragraph{margin-top:14px}}
-</style>
-</head>
-<body data-page="brief.html"><details class="mobile-menu"><summary>CLAUDE FUND · 시장 브리프</summary><nav aria-label="페이지 목차" class="page-nav"><a href="index.html">운용 개요</a><a href="performance.html">성과 분석</a><a href="holdings.html">보유종목</a><a href="trades.html">체결·판단 기록</a><a aria-current="page" class="active" href="brief.html">시장 브리프</a><a href="economy.html">경제지표</a><a href="etfs.html">액티브 ETF</a></nav></details>
-<aside aria-label="보고서 사이드바" class="sidebar"><a class="sidebar-brand" href="index.html">CLAUDE FUND<small>한국 주식 모의투자</small></a><nav aria-label="섹션 탐색"><span class="nav-group">운용 현황</span><a href="index.html">운용 개요</a><a href="holdings.html">보유종목</a><a href="performance.html">성과 분석</a><a href="trades.html">체결·판단 기록</a><span class="nav-group">시장 판단</span><a aria-current="page" class="active" href="brief.html">시장 브리프</a><a href="economy.html">경제지표</a><span class="nav-group">참고 자료</span><a href="etfs.html">액티브 ETF</a></nav><div class="sidebar-status">종가 기준<small>2026-09-04</small><span>모의투자 · 초기자본 1억원</span></div></aside>
-<div class="wrap"><header class="page-heading"><span class="page-kicker">CLAUDE FUND / REPORT</span><h1>시장 브리프</h1><p>Telebrief 핵심 요약과 보유종목 관련 뉴스</p></header><div aria-label="시장 자료 선택" class="content-switch" role="group"><button aria-controls="telebrief" aria-pressed="false" data-section-target="telebrief" type="button">오늘의 요약</button><button aria-controls="related-news" aria-pressed="false" data-section-target="related-news" type="button">관련 뉴스</button><button aria-controls="index-events" aria-pressed="false" data-section-target="index-events" type="button">지수 편출입</button></div>
+.hero{padding:26px 0 6px}
+.hero .label{font-size:13.5px;color:var(--ink2);font-weight:500}
+.hero .total{font-size:38px;font-weight:800;letter-spacing:-.035em;line-height:1.15;margin-top:2px}
+.hero .delta{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:15px;font-weight:600;flex-wrap:wrap}
+.chip{font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:999px}
+.chip.up{background:var(--up-bg);color:var(--up)}.chip.down{background:var(--down-bg);color:var(--down)}
+.chip.flat{background:var(--card2);color:var(--ink2)}
 
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin:14px 0}
+.card>h2{font-size:15px;font-weight:700;margin:0 0 14px;display:flex;justify-content:space-between;align-items:baseline}
+.card>h2 a{font-size:12.5px;color:var(--accent);font-weight:500}
+.kpis{display:grid;grid-template-columns:1fr 1fr;gap:2px 20px}
+.kpis>div{padding:9px 0}
+.kpis .k{font-size:13px;color:var(--ink2)}
+.kpis .v{font-size:17px;font-weight:700;margin-top:2px}
+.kpis .v small{font-size:12px;font-weight:500;color:var(--ink3)}
 
+.row{display:flex;align-items:center;gap:13px;padding:13px 0}
+.row+.row{border-top:1px solid var(--line)}
+.avatar{width:40px;height:40px;border-radius:14px;background:var(--card2);color:var(--ink2);
+ display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+.row .mid{flex:1;min-width:0}
+.row .name{font-size:15px;font-weight:600}
+.row .sub{font-size:13.5px;color:var(--ink2);margin-top:2px;font-weight:500}
+.row .right{text-align:right}
+.row .amt{font-size:15px;font-weight:700}
+.row .chg{font-size:13.5px;font-weight:700;margin-top:2px}
 
+.chart svg{width:100%;display:block;max-width:none}
+.cmp{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.cmp .k{font-size:12.5px;color:var(--ink2);font-weight:500}
+.cmp .v{font-size:19px;font-weight:800;margin-top:2px}
+.legend{display:flex;gap:16px;font-size:12.5px;color:var(--ink2);margin-top:10px;font-weight:500;flex-wrap:wrap}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
 
+.seg{display:flex;background:var(--card2);border-radius:12px;padding:3px;margin:14px 0 2px}
+.seg button{flex:1;text-align:center;font-size:13px;font-weight:600;color:var(--ink2);padding:8px 0;border-radius:9px;border:0;background:none}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+.tblwrap{overflow-x:auto;margin:0 -22px;border-top:0}
+table.det{border-collapse:collapse;width:100%;min-width:860px;font-size:13.5px}
+table.det th{font-size:12px;color:var(--ink2);font-weight:600;text-align:right;padding:8px 10px;
+ border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none;background:var(--card)}
+table.det th:first-child{text-align:left}
+table.det td{padding:10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;font-size:13.5px}
+table.det td:first-child{text-align:left;font-weight:600}
+table.det th:first-child,table.det td:first-child{position:sticky;left:0;background:var(--card);z-index:1;padding-left:22px}
+table.det th:last-child,table.det td:last-child{padding-right:22px}
+table.det .arr{opacity:.5;font-size:10px}
+table.det td small{display:block;font-size:11px;color:var(--ink3);font-weight:400}
+table.det tfoot td{font-weight:700;background:var(--card)}
 
+.day{font-size:13px;font-weight:700;color:var(--ink2);margin:20px 0 4px}
+.trade-side{font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px;margin-right:2px}
+.trade-side.buy{background:var(--up-bg);color:var(--up)}
+.trade-side.sell{background:var(--down-bg);color:var(--down)}
+.headline{font-size:13.5px;line-height:1.75;color:var(--ink2);margin-top:6px}
+details.why{margin-top:6px}
+details.why summary{font-size:12.5px;color:var(--accent);cursor:pointer;list-style:none;font-weight:500}
+details.why summary::before{content:"원칙·근거·보완 ▾"}
+details.why[open] summary::before{content:"원칙·근거·보완 ▴"}
+details.why .trade-reason{background:var(--card2);border-radius:var(--radius-s);padding:12px 14px;margin-top:8px}
+.trade-tools{display:flex;gap:10px;margin:14px 0 4px;flex-wrap:wrap}
+.trade-tools input,.trade-tools select{font:inherit;font-size:13.5px;background:var(--card);color:var(--ink);
+ border:1px solid var(--line);padding:10px 14px;border-radius:12px;flex:1;min-width:140px}
+.trade-count{font-size:12.5px;color:var(--ink3);margin:8px 2px}
+.pagination{display:flex;gap:10px;margin:16px 0 4px}
+.pagination button{font-size:13px;font-weight:600;background:var(--card);border:1px solid var(--line);
+ border-radius:12px;padding:10px 16px;color:var(--ink2)}
+.pagination button:disabled{opacity:.4;cursor:default}
 
+.tb-card h3{font-size:15px;font-weight:700;margin:0 0 10px}
+.tb-star{font-size:14.5px;font-weight:600;line-height:1.65;padding-left:14px;
+ border-left:3px solid var(--accent);margin:12px 0 6px}
+.tb-fact{font-size:13.5px;color:var(--ink2);line-height:1.7;margin:5px 0 5px 17px;
+ list-style:none;position:relative;padding-left:12px}
+.tb-fact::before{content:"";position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:50%;background:var(--ink3)}
+.tb-flow{font-size:13.5px;color:var(--ink2);line-height:1.7;margin:5px 0 5px 17px;padding-left:2px}
+.tb-flow::before{content:"→ ";color:var(--accent);font-weight:700}
+.tb-plain{font-size:14px;color:var(--ink2);line-height:1.7;margin:8px 0}
 
+.tabbar{position:fixed;left:0;right:0;top:auto;bottom:0;z-index:30;display:block;padding:0;gap:0;
+ background:color-mix(in srgb,var(--card) 92%,transparent);
+ backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);border-bottom:0}
+.tabbar-in{max-width:680px;margin:0 auto;display:flex}
+.tab{flex:1;text-align:center;padding:9px 0 max(9px,env(safe-area-inset-bottom));font-size:11px;color:var(--ink3);font-weight:600;border:0}
+.tab svg{display:block;margin:0 auto 3px;width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.tab.on{color:var(--ink);border:0}
+.tab.more{display:none}
+.footnote{font-size:12px;color:var(--ink3);line-height:1.7;padding:18px 2px 8px}
+.footnote summary{cursor:pointer;font-weight:600}
+.footnote p{margin:8px 0 0}
+.grid2{display:contents}
+.quick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.quick a{display:block;text-align:center;background:var(--card2);border-radius:var(--radius-s);
+ padding:14px 6px;font-size:13px;font-weight:600;color:var(--ink2)}
 
+/* ══ 레거시 섹션 카드화 ══ */
+section{padding:0;border-bottom:0;scroll-margin-top:76px}
+section>h2:before{display:none}
+.legacy section{padding:0;border-bottom:0}
+.legacy section>h2{font-size:15.5px;font-weight:700;margin:0 0 6px}
+.legacy h3{font-size:14px;font-weight:700}
+.legacy h4{font-size:13px;font-weight:700}
+.legacy .note{font-size:12.5px;color:var(--ink3);line-height:1.7}
+.legacy .table-scroll{border-top:0;margin-top:14px;border-radius:12px}
+.legacy table{font-size:13px}
+.legacy thead th{background:var(--card2)}
+.legacy .economic-review,.legacy .analyst-views article,.legacy .home-card{border-radius:var(--radius-s)}
+.legacy .tele-lead article{border-radius:var(--radius-s);border-top:2px solid var(--accent)}
+.legacy .sector-members{border-radius:12px}
+.legacy input,.legacy select{border-radius:12px}
+.legacy .stack{display:flex;height:14px;border-radius:999px;overflow:hidden;margin:14px 0 16px}
+.legacy .stack i{display:block;height:100%}
+.legacy .lg{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.legacy .lg .sw{width:12px;height:12px;border-radius:4px;flex-shrink:0}
+.legacy .lg .nm{flex:1;font-weight:600}
+.legacy .lg .c{color:var(--ink3);font-size:12px}
+.legacy .rows .r{display:grid;grid-template-columns:1fr auto;gap:4px 16px;padding:13px 0;border-bottom:1px solid var(--line)}
+.legacy .rows .r:last-child{border-bottom:0}
+.legacy .r .nm{font-weight:600;font-size:14px}
+.legacy .r .nm small{font-weight:400;color:var(--ink3)}
+.legacy .r .desc,.legacy .r .meta{font-size:12.5px;color:var(--ink3)}
+.legacy .r .val{text-align:right;font-weight:700}
+.legacy .r .held{font-size:11px;color:var(--accent);font-weight:600}
+.legacy .split{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.legacy .empty{color:var(--ink3);font-size:13.5px;padding:8px 0}
+.legacy .macro-detail{background:var(--card2);border-radius:var(--radius-s);padding:18px}
+.legacy .event-reading{border-radius:var(--radius-s)}
+.legacy .mac{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 16px}
+.legacy .mac .k{font-size:12.5px;color:var(--ink2)}
+.legacy .mac .v{font-size:15px;font-weight:700;margin-top:2px}
+.legacy .mac .c{font-size:12.5px;font-weight:600}
+@media(max-width:620px){.legacy .split{grid-template-columns:1fr}.legacy .mac{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-
-
-
-
-
-
-
-
-<section id="telebrief"><div class="tele-heading"><h2>Telebrief · 오늘의 시장 이슈</h2><span class="tele-badge">수집 요약</span></div>
-<p class="note">발행 2026-09-06 07:02 KST · 최근 24시간</p>
-<div class="tele-lead"><article><h3>핵심 3줄</h3><ul><li class="mainpoint readable-prose"><span class="prose-paragraph">미국 매파 기조 강화로 금리 기대 역주행: 8월 고용 16.2만명 증가로 9월 인상 가능성 열림, 연말 정책금리 기대는 4.23%로 트럼프 취임 당시 수준으로 회귀</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">반도체 초고성장 사이클에서 인력·장비 공급이 새로운 병목: TSMC CAPEX 600억~640억달러로 상향 조정했으나 20개 팹 동시 건설 중에도 AI 수요를 못 따라가는 상황</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">메모리 원가 상승 속 AI 토큰 가격 절반 이하로 급락: 추론 경제성 빠르게 개선되면서 에이전트·장문맥 등 연산집약적 AI 활용 수익성 확대 오늘 볼 것</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">9월 25bp 인상 기본 전망 유지, 다음 주 CPI 공시로 9월 인상 여부 실마리 확인</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">GPT-6 Astra 대중 활용 사례(부동산·게임·3D 모델링) 확산 속도와 실제 기업 생산성 수익화 진행 상황</span></li></ul></article></div><div class="tele-topics"><details class="tele-topic"><summary>💰 금리·인상</summary><ul><li class="mainpoint readable-prose"><span class="prose-paragraph">미국이 매파 기조 강화 중. 워시 연준 의장 잭슨홀 발언 이후 시장이 반영하는 연말 정책금리 기대가 4.23%로 상승</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">8월 비농업 고용 16.2만명(컨센서스 상회), 실업률 4.1%, 3개월 평균 7.1만명으로 견조</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">→ 연준 매파 신호 강화(6월 FOMC서 3명 인상 소수의견, 7월에도 지속)</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">→ 금리 인상 기대 확대 → 채권 매도·금리 상승 압박(미국채 10년 고점 대비 되돌림)</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">소시에테 제네랄, 연준이 9월부터 총 3차례 금리 인상할 것으로 전망. 과거 인상 초기 1~3개월 정체 후 6개월 내 S&amp;P500 신기록 갱신 패턴 반복될 가능성</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">Barclays, 8월 비농업 고용 과장분 존재 평가. 민간 고용의 3개월 평균 7.5만명이 실제 노동수요 판단에 더 참고할 만한 수치</span></li></ul></details><details class="tele-topic"><summary>🏥 반도체 공급망</summary><ul><li class="mainpoint readable-prose"><span class="prose-paragraph">TSMC, CAPEX 600억~640억달러로 상향 조정하면서 2026년 전망 강화. 다만 병목은 자금이 아니라 숙련 건설 인력</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">현재 13개 대만·5~6개 해외 팹 동시 건설 중, 과거 4~5개 대비 4~5배 수준</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">→ AI 수요 폭증에도 2나노·3나노·성숙공정·패키징 전방위 부족 지속</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">→ 장비·소재·EPC 공급망 전체 추가 발주 가능성 확대 → 삼성전자도 팹 증설 인프라·협력사 확보 중요해짐</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">메모리 제약 강조. Dell·HPE 등 수주·백로그와 매출 괴리 커지는 중, 메모리 확보 위해 장기계약 체결 중</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">UBS, 반도체 산업 셀인 매출 2026년 1조6,300억달러(+118%), 2027년 2조4,300억달러(+49%), 2028년 2조7,200억달러(+12%)로 전망. 메모리만 2026년 9,550억달러(+315%), 2027년 1조6,500억달러(+72%)</span></li></ul></details><details class="tele-topic"><summary>💻 AI 추론 경제성</summary><ul><li class="mainpoint readable-prose"><span class="prose-paragraph">AI 토큰 가격 5월 백만토큰당 2.06달러에서 8월 말 1달러 안팎으로 절반 이상 급락</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">반면 DDR5 메모리 현물가격은 50달러 안팎으로 상승</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">→ 메모리 가격·토큰가 반대 방향, 추론 경제성 빠르게 개선</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">→ 낮아진 토큰가 사용량 증가 → 에이전트·장문맥 연산집약적 활용 확대 가능성</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">GPT-6 Astra 대중 배포 시작. 부동산(사진→3D 모델링→홍보영상 45분), 게임(45분 3D 게임 원샷 제작), 3D 모델링 등에서 시간·전문 인력 수요 대폭 축소</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">측정되는 생산성보다 현장의 '풀'이 먼저 커지는 양상</span></li></ul></details><details class="tele-topic"><summary>🌍 이란 제재 확대</summary><ul><li class="mainpoint readable-prose"><span class="prose-paragraph">미국, Operation Economic Outcast 일환으로 튀르키예 Golden Global Bankası 등 3곳 제재. OFAC SDN 명단 추가로 미국 금융시스템 접근 차단</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">Golden Global이 중국산 이란 원유 판매대금을 튀르키예로 이전, 현금·Gold로 전환해 이란에 전달하는 금융망 일부 담당</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">→ 제3국 은행까지 Secondary Sanction 확대</span></li><li class="subpoint readable-prose"><span class="prose-paragraph">→ 이란 국제 금융망 연결고리 하나씩 차단 추진</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">Bessent 재무장관 경고: 추가 제재 여부는 금융기관의 이란 거래 중단 속도에 달려있음. 매주 새로운 Secondary Sanction 발표 가능성</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">다만 중국에 대해서는 아직 본격 금융제재 미시행. 이란 Oil Revenue 실질적 차단 위해 중국 Buyer·금융기관 Secondary Sanction이 중요 변수</span></li></ul></details><details class="tele-topic"><summary>📈 미국 건설·데이터센터</summary><ul><li class="mainpoint readable-prose"><span class="prose-paragraph">미국 건설 붐은 AI 데이터센터에만 의존. 7월 데이터센터 건설 연환산 750억달러, 2023년 말 이후 510억달러 증가</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">주택·상점·사무실 등 다른 민간 건설은 같은 기간 1,200억달러 감소. 하나의 항목이 전체 건설 경제를 지탱하는 구조</span></li><li class="mainpoint readable-prose"><span class="prose-paragraph">브로드컴 약한 AI 칩 가이던스 제시. 데이터센터 지출 둔화 시 하단에 탄력성 없음을 의미</span></li></ul></details><details class="tele-topic"><summary>🏛️ 지배구조</summary><ul><li class="mainpoint readable-prose"><span class="prose-paragraph">특이사항 없음</span></li></ul></details></div>
-<p class="note">채널 수집 요약이라 검증 전 주장·전망이 섞여 있다. 판단에는 원문 대조를 거친 내용만 쓴다.</p></section><section id="related-news"><h2>보유종목 관련 뉴스 · 최신순</h2><p class="note">네이버의 종목 연관 뉴스와 기존 수집본을 합쳤습니다. 발행 시각이 확인된 기사는 발행 시각을, 기존 자료는 수집일을 표시합니다. 연관 분류는 해당 기업을 직접 다룬다는 뜻은 아니며 기사 원문을 확인해야 합니다.</p><ul class="related-news"><li><div><span class="news-date">2026-09-06 20:28 KST 발행</span><span class="news-stocks">키움증권</span></div><a href="https://n.news.naver.com/mnews/article/032/0003468734" rel="noopener noreferrer" target="_blank">재정 풀고 금리 올리면 엇박자?…관건은 ‘예산 쓰임새’</a></li><li><div><span class="news-date">2026-09-06 20:12 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/030/0003464026" rel="noopener noreferrer" target="_blank">퇴직연금, 주식 몰빵은 불안한데…“수익은 내야” ETF에 몰리면서 60...</a></li><li><div><span class="news-date">2026-09-06 19:56 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/081/0003677209" rel="noopener noreferrer" target="_blank">오를 때도 내릴 때도 ‘뒷북’… ‘목표주가’에 물린 개미들 [목표주...</a></li><li><div><span class="news-date">2026-09-06 19:53 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/009/0005731141" rel="noopener noreferrer" target="_blank">“월요일에 삼전닉스의 시간 옵니까”…GPT-6에 불붙은 美반도체</a></li><li><div><span class="news-date">2026-09-06 19:41 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/016/0002693392" rel="noopener noreferrer" target="_blank">[증시 예보] 美 10년물 5% 문턱…코스피, CPI·만기일에 반등 시험대</a></li><li><div><span class="news-date">2026-09-06 19:40 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/016/0002693391" rel="noopener noreferrer" target="_blank">“230만원→70만원” SK하이닉스보다 심하다…‘반토막’에 충격적 리...</a></li><li><div><span class="news-date">2026-09-06 18:49 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/029/0003046424" rel="noopener noreferrer" target="_blank">[기획] 환율 2년만 최저… 이젠 실적방어 초비상</a></li><li><div><span class="news-date">2026-09-06 18:47 KST 발행</span><span class="news-stocks">두산에너빌리티</span></div><a href="https://n.news.naver.com/mnews/article/052/0002403469" rel="noopener noreferrer" target="_blank">"셰르파 등 40여 명 투입"...기업팀은 육상수색 확대</a></li><li><div><span class="news-date">2026-09-06 18:46 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/028/0002821869" rel="noopener noreferrer" target="_blank">메가특구 ‘주52시간 예외’ 기준안, 산업부 1억-노동부 1.4억</a></li><li><div><span class="news-date">2026-09-06 18:41 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/014/0005571661" rel="noopener noreferrer" target="_blank">[단독] 베트남, SK 전담TF 구성…LNG·AI사업 탄력</a></li><li><div><span class="news-date">2026-09-06 18:40 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/052/0002403466" rel="noopener noreferrer" target="_blank">23개월 만에 최저 환율...안정세 이어가나?</a></li><li><div><span class="news-date">2026-09-06 18:35 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/015/0005329268" rel="noopener noreferrer" target="_blank">신사업 승부수 띄운 日 가와사키 [한경 프리미엄9 TODAY]</a></li></ul></section><section id="index-events"><h2>주요 지수 편출입</h2><p class="note">패시브 자금이 움직이는 수급 이벤트로만 참고한다. 국내 연관 기업은 확인 상태를 함께 적는다.</p><article><h3>S&amp;P 500 — 분기 리밸런스 3종 교체</h3><p class="note">발표 2026-09-04 · 발효 2026-09-21 개장 전 · 발표 후 시간외 BE +7.5% · ILMN +2% · P +2.2% (보도 인용, 기준시각 미확인)</p><div class="rows"><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side up">편입</span></div><div><div class="nm">BE 블룸에너지</div><div class="desc">연료전지(SOFC) · Industrials</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side up">편입</span></div><div><div class="nm">P 에버퓨어</div><div class="desc">스토리지 · Information Technology</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side up">편입</span></div><div><div class="nm">ILMN 일루미나</div><div class="desc">염기서열 분석장비 · Health Care</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side down">편출</span></div><div><div class="nm">TAP 몰슨 쿠어스</div><div class="desc">맥주</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side down">편출</span></div><div><div class="nm">TTD 더 트레이드 데스크</div><div class="desc">광고 수요플랫폼</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side down">편출</span></div><div><div class="nm">BLDR 빌더스 퍼스트소스</div><div class="desc">건축자재</div></div></div></div><h3>국내 상장사 노출</h3><ul class="kr-exposure"><li><b>두산퓨얼셀</b> <small>(336260)</small> — BE 편입 = 연료전지 테마의 지수 제도화. 국내 동종(PAFC) <small>[테마 연결 — 직접 거래관계 아님]</small></li><li><b>범한퓨얼셀</b> <small>(382900)</small> — 연료전지 동종. BE 파트너는 SK에코플랜트(비상장) <small>[테마 연결]</small></li><li><b>네오셈</b> <small>(253590)</small> — 에버퓨어(IT 스토리지) → eSSD 테스트 체인 접점 가능 <small>[미확인 — 에버퓨어 사업 내용 확인 필요]</small></li><li><b>파두</b> <small>(440110)</small> — SSD 컨트롤러 — 데이터 스토리지 체인 <small>[미확인 — 동일]</small></li><li><b>마크로젠</b> <small>(038290)</small> — ILMN NGS 장비의 국내 대형 고객(서비스사) — 수혜 방향 불명확 <small>[관계 확인·방향 불명]</small></li></ul><p class="note"><a href="https://press.spglobal.com/2026-09-04-Bloom-Energy,-Illumina,-and-Everpure-Set-to-Join-S-P-500-Others-to-Join-S-P-100,-S-P-MidCap-400,-and-S-P-SmallCap-600" rel="noopener">공식 발표 원문</a></p></article><article><h3>예정 창 (명단 미발표) — 다음 정기변경 일정</h3><p class="note">발표 — · 발효 발표 시 갱신</p><div class="rows"><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side">예정</span></div><div><div class="nm"> MSCI 11월 QIR</div><div class="desc">11월 초 발표 관례 — 발표 시 국내 편출입 명단 반영</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side">예정</span></div><div><div class="nm"> KOSPI200·코스닥150 12월 정기변경</div><div class="desc">12월 만기일 적용 관례</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side">예정</span></div><div><div class="nm"> 나스닥100 연례 재구성</div><div class="desc">12월 발표·적용 관례</div></div></div></div></article></section><details class="footer-detail"><summary>운용 기준 · 데이터 갱신 안내</summary><footer>
-<b>운용 방식</b> — Claude가 매 영업일 07:00에 전일 뉴스·공시·매크로를 검토하여 판단하고,
-    09:05 실행 시점의 시세로 모의 체결하며, 장 마감 후 종가를 기록한다. 필요 시 수동 거래·기업행동 보정을 수행할 수 있다.
-    한 종목 15% 이내, 최대 15종목, 현금 15% 이상, 3단계 기계 청산선.<br/>
-<b>본 페이지</b> — 실제 주문이 아닌 모의투자 기록이며, 투자 권유가 아니다.
-    체결 사유는 당시 원장 기록이며 Telebrief는 별도 발행 시각의 수집 요약이다. 매 영업일 09:05·20:10 갱신 작업이 실행되며, 이 페이지의 성과·보유 종목은 마지막 검증된 종가 기준이다. 시세 조회나 잔고 대사 실패 시 마지막 정상 페이지를 유지한다.
-  </footer></details>
-</div>
+/* ══ PC: 사이드레일 + 2열 ══ */
+@media(min-width:1080px){
+ body{padding-bottom:32px;padding-left:224px!important;padding-right:0!important}
+ .tabbar{left:0;right:auto;top:0;bottom:0;width:224px;border-top:0;border-right:1px solid var(--line)}
+ .tabbar-in{flex-direction:column;max-width:none;padding:26px 0 0;gap:2px}
+ .tab{flex:0 0 auto;display:flex;align-items:center;gap:12px;text-align:left;
+  font-size:14px;padding:11px 26px;border-radius:0 999px 999px 0;margin-right:14px}
+ .tab svg{margin:0}
+ .tab.on{background:var(--card2)}
+ .tab.more{display:flex}
+ .rail-brand{display:block;padding:0 26px 18px;font-size:15px;font-weight:800;letter-spacing:-.02em}
+ .rail-brand small{display:block;font-size:11px;font-weight:500;color:var(--ink3);margin-top:4px}
+ .appbar-in,.app{max-width:1100px}
+ .grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px;align-items:start}
+ .grid2 .card{margin:8px 0}
+ .grid2 .span2{grid-column:1/-1}
+}
+@media(min-width:1180px){body{padding-left:224px!important;padding-right:0!important}
+ .wrap>nav{display:flex}.sidebar{display:none}}
+@media(max-width:1079px){.rail-brand{display:none}}
+</style></head><body data-page="brief.html">
+<div class="appbar"><div class="appbar-in"><b>Claude Fund</b><span class="mini n">2026-09-04 종가 · 모의투자</span></div></div>
+<main class="app"><div class="hero" id="telebrief"><div class="label">시장 브리프</div><div class="total" style="font-size:26px">7개 주제</div><div class="delta"><span class="chip flat">발행 2026-09-06 07:02 KST · 최근 24시간</span></div></div><p class="trade-count">채널 수집 요약이라 검증 전 주장·전망이 섞여 있다. 펀드 판단에는 원문 대조를 거친 내용만 쓴다.</p><div class="grid2"><section class="card tb-card"><h3>핵심 3줄</h3><div class="tb-star">미국 매파 기조 강화로 금리 기대 역주행: 8월 고용 16.2만명 증가로 9월 인상 가능성 열림, 연말 정책금리 기대는 4.23%로 트럼프 취임 당시 수준으로 회귀</div><p class="tb-plain">반도체 초고성장 사이클에서 인력·장비 공급이 새로운 병목: TSMC CAPEX 600억~640억달러로 상향 조정했으나 20개 팹 동시 건설 중에도 AI 수요를 못 따라가는 상황</p><p class="tb-plain">메모리 원가 상승 속 AI 토큰 가격 절반 이하로 급락: 추론 경제성 빠르게 개선되면서 에이전트·장문맥 등 연산집약적 AI 활용 수익성 확대 오늘 볼 것</p><p class="tb-plain">9월 25bp 인상 기본 전망 유지, 다음 주 CPI 공시로 9월 인상 여부 실마리 확인</p><p class="tb-plain">GPT-6 Astra 대중 활용 사례(부동산·게임·3D 모델링) 확산 속도와 실제 기업 생산성 수익화 진행 상황</p></section><section class="card tb-card"><h3>💰 금리·인상</h3><div class="tb-star">미국이 매파 기조 강화 중. 워시 연준 의장 잭슨홀 발언 이후 시장이 반영하는 연말 정책금리 기대가 4.23%로 상승</div><li class="tb-fact">8월 비농업 고용 16.2만명(컨센서스 상회), 실업률 4.1%, 3개월 평균 7.1만명으로 견조</li><div class="tb-flow">연준 매파 신호 강화(6월 FOMC서 3명 인상 소수의견, 7월에도 지속)</div><div class="tb-flow">금리 인상 기대 확대 → 채권 매도·금리 상승 압박(미국채 10년 고점 대비 되돌림)</div><p class="tb-plain">소시에테 제네랄, 연준이 9월부터 총 3차례 금리 인상할 것으로 전망. 과거 인상 초기 1~3개월 정체 후 6개월 내 S&amp;P500 신기록 갱신 패턴 반복될 가능성</p><p class="tb-plain">Barclays, 8월 비농업 고용 과장분 존재 평가. 민간 고용의 3개월 평균 7.5만명이 실제 노동수요 판단에 더 참고할 만한 수치</p></section><section class="card tb-card"><h3>🏥 반도체 공급망</h3><div class="tb-star">TSMC, CAPEX 600억~640억달러로 상향 조정하면서 2026년 전망 강화. 다만 병목은 자금이 아니라 숙련 건설 인력</div><li class="tb-fact">현재 13개 대만·5~6개 해외 팹 동시 건설 중, 과거 4~5개 대비 4~5배 수준</li><div class="tb-flow">AI 수요 폭증에도 2나노·3나노·성숙공정·패키징 전방위 부족 지속</div><div class="tb-flow">장비·소재·EPC 공급망 전체 추가 발주 가능성 확대 → 삼성전자도 팹 증설 인프라·협력사 확보 중요해짐</div><p class="tb-plain">메모리 제약 강조. Dell·HPE 등 수주·백로그와 매출 괴리 커지는 중, 메모리 확보 위해 장기계약 체결 중</p><p class="tb-plain">UBS, 반도체 산업 셀인 매출 2026년 1조6,300억달러(+118%), 2027년 2조4,300억달러(+49%), 2028년 2조7,200억달러(+12%)로 전망. 메모리만 2026년 9,550억달러(+315%), 2027년 1조6,500억달러(+72%)</p></section><section class="card tb-card"><h3>💻 AI 추론 경제성</h3><div class="tb-star">AI 토큰 가격 5월 백만토큰당 2.06달러에서 8월 말 1달러 안팎으로 절반 이상 급락</div><li class="tb-fact">반면 DDR5 메모리 현물가격은 50달러 안팎으로 상승</li><div class="tb-flow">메모리 가격·토큰가 반대 방향, 추론 경제성 빠르게 개선</div><div class="tb-flow">낮아진 토큰가 사용량 증가 → 에이전트·장문맥 연산집약적 활용 확대 가능성</div><p class="tb-plain">GPT-6 Astra 대중 배포 시작. 부동산(사진→3D 모델링→홍보영상 45분), 게임(45분 3D 게임 원샷 제작), 3D 모델링 등에서 시간·전문 인력 수요 대폭 축소</p><p class="tb-plain">측정되는 생산성보다 현장의 &#x27;풀&#x27;이 먼저 커지는 양상</p></section><section class="card tb-card"><h3>🌍 이란 제재 확대</h3><div class="tb-star">미국, Operation Economic Outcast 일환으로 튀르키예 Golden Global Bankası 등 3곳 제재. OFAC SDN 명단 추가로 미국 금융시스템 접근 차단</div><li class="tb-fact">Golden Global이 중국산 이란 원유 판매대금을 튀르키예로 이전, 현금·Gold로 전환해 이란에 전달하는 금융망 일부 담당</li><div class="tb-flow">제3국 은행까지 Secondary Sanction 확대</div><div class="tb-flow">이란 국제 금융망 연결고리 하나씩 차단 추진</div><p class="tb-plain">Bessent 재무장관 경고: 추가 제재 여부는 금융기관의 이란 거래 중단 속도에 달려있음. 매주 새로운 Secondary Sanction 발표 가능성</p><p class="tb-plain">다만 중국에 대해서는 아직 본격 금융제재 미시행. 이란 Oil Revenue 실질적 차단 위해 중국 Buyer·금융기관 Secondary Sanction이 중요 변수</p></section><section class="card tb-card"><h3>📈 미국 건설·데이터센터</h3><div class="tb-star">미국 건설 붐은 AI 데이터센터에만 의존. 7월 데이터센터 건설 연환산 750억달러, 2023년 말 이후 510억달러 증가</div><p class="tb-plain">주택·상점·사무실 등 다른 민간 건설은 같은 기간 1,200억달러 감소. 하나의 항목이 전체 건설 경제를 지탱하는 구조</p><p class="tb-plain">브로드컴 약한 AI 칩 가이던스 제시. 데이터센터 지출 둔화 시 하단에 탄력성 없음을 의미</p></section><section class="card tb-card"><h3>🏛️ 지배구조</h3><div class="tb-star">특이사항 없음</div></section></div><div class="card legacy"><section id="related-news"><h2>보유종목 관련 뉴스 · 최신순</h2><p class="note">네이버의 종목 연관 뉴스와 기존 수집본을 합쳤습니다. 발행 시각이 확인된 기사는 발행 시각을, 기존 자료는 수집일을 표시합니다. 연관 분류는 해당 기업을 직접 다룬다는 뜻은 아니며 기사 원문을 확인해야 합니다.</p><ul class="related-news"><li><div><span class="news-date">2026-09-06 20:28 KST 발행</span><span class="news-stocks">키움증권</span></div><a href="https://n.news.naver.com/mnews/article/032/0003468734" target="_blank" rel="noopener noreferrer">재정 풀고 금리 올리면 엇박자?…관건은 ‘예산 쓰임새’</a></li><li><div><span class="news-date">2026-09-06 20:12 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/030/0003464026" target="_blank" rel="noopener noreferrer">퇴직연금, 주식 몰빵은 불안한데…“수익은 내야” ETF에 몰리면서 60...</a></li><li><div><span class="news-date">2026-09-06 19:56 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/081/0003677209" target="_blank" rel="noopener noreferrer">오를 때도 내릴 때도 ‘뒷북’… ‘목표주가’에 물린 개미들 [목표주...</a></li><li><div><span class="news-date">2026-09-06 19:53 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/009/0005731141" target="_blank" rel="noopener noreferrer">“월요일에 삼전닉스의 시간 옵니까”…GPT-6에 불붙은 美반도체</a></li><li><div><span class="news-date">2026-09-06 19:41 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/016/0002693392" target="_blank" rel="noopener noreferrer">[증시 예보] 美 10년물 5% 문턱…코스피, CPI·만기일에 반등 시험대</a></li><li><div><span class="news-date">2026-09-06 19:40 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/016/0002693391" target="_blank" rel="noopener noreferrer">“230만원→70만원” SK하이닉스보다 심하다…‘반토막’에 충격적 리...</a></li><li><div><span class="news-date">2026-09-06 18:49 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/029/0003046424" target="_blank" rel="noopener noreferrer">[기획] 환율 2년만 최저… 이젠 실적방어 초비상</a></li><li><div><span class="news-date">2026-09-06 18:47 KST 발행</span><span class="news-stocks">두산에너빌리티</span></div><a href="https://n.news.naver.com/mnews/article/052/0002403469" target="_blank" rel="noopener noreferrer">&quot;셰르파 등 40여 명 투입&quot;...기업팀은 육상수색 확대</a></li><li><div><span class="news-date">2026-09-06 18:46 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/028/0002821869" target="_blank" rel="noopener noreferrer">메가특구 ‘주52시간 예외’ 기준안, 산업부 1억-노동부 1.4억</a></li><li><div><span class="news-date">2026-09-06 18:41 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/014/0005571661" target="_blank" rel="noopener noreferrer">[단독] 베트남, SK 전담TF 구성…LNG·AI사업 탄력</a></li><li><div><span class="news-date">2026-09-06 18:40 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/052/0002403466" target="_blank" rel="noopener noreferrer">23개월 만에 최저 환율...안정세 이어가나?</a></li><li><div><span class="news-date">2026-09-06 18:35 KST 발행</span><span class="news-stocks">SK하이닉스</span></div><a href="https://n.news.naver.com/mnews/article/015/0005329268" target="_blank" rel="noopener noreferrer">신사업 승부수 띄운 日 가와사키 [한경 프리미엄9 TODAY]</a></li></ul></section></div><div class="card legacy"><section id="index-events"><h2>주요 지수 편출입</h2><p class="note">패시브 자금이 움직이는 수급 이벤트로만 참고한다. 국내 연관 기업은 확인 상태를 함께 적는다.</p><article><h3>S&amp;P 500 — 분기 리밸런스 3종 교체</h3><p class="note">발표 2026-09-04 · 발효 2026-09-21 개장 전 · 발표 후 시간외 BE +7.5% · ILMN +2% · P +2.2% (보도 인용, 기준시각 미확인)</p><div class="rows"><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side up">편입</span></div><div><div class="nm">BE 블룸에너지</div><div class="desc">연료전지(SOFC) · Industrials</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side up">편입</span></div><div><div class="nm">P 에버퓨어</div><div class="desc">스토리지 · Information Technology</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side up">편입</span></div><div><div class="nm">ILMN 일루미나</div><div class="desc">염기서열 분석장비 · Health Care</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side down">편출</span></div><div><div class="nm">TAP 몰슨 쿠어스</div><div class="desc">맥주</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side down">편출</span></div><div><div class="nm">TTD 더 트레이드 데스크</div><div class="desc">광고 수요플랫폼</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side down">편출</span></div><div><div class="nm">BLDR 빌더스 퍼스트소스</div><div class="desc">건축자재</div></div></div></div><h3>국내 상장사 노출</h3><ul class="kr-exposure"><li><b>두산퓨얼셀</b> <small>(336260)</small> — BE 편입 = 연료전지 테마의 지수 제도화. 국내 동종(PAFC) <small>[테마 연결 — 직접 거래관계 아님]</small></li><li><b>범한퓨얼셀</b> <small>(382900)</small> — 연료전지 동종. BE 파트너는 SK에코플랜트(비상장) <small>[테마 연결]</small></li><li><b>네오셈</b> <small>(253590)</small> — 에버퓨어(IT 스토리지) → eSSD 테스트 체인 접점 가능 <small>[미확인 — 에버퓨어 사업 내용 확인 필요]</small></li><li><b>파두</b> <small>(440110)</small> — SSD 컨트롤러 — 데이터 스토리지 체인 <small>[미확인 — 동일]</small></li><li><b>마크로젠</b> <small>(038290)</small> — ILMN NGS 장비의 국내 대형 고객(서비스사) — 수혜 방향 불명확 <small>[관계 확인·방향 불명]</small></li></ul><p class="note"><a href="https://press.spglobal.com/2026-09-04-Bloom-Energy,-Illumina,-and-Everpure-Set-to-Join-S-P-500-Others-to-Join-S-P-100,-S-P-MidCap-400,-and-S-P-SmallCap-600" rel="noopener">공식 발표 원문</a></p></article><article><h3>예정 창 (명단 미발표) — 다음 정기변경 일정</h3><p class="note">발표 — · 발효 발표 시 갱신</p><div class="rows"><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side ">예정</span></div><div><div class="nm"> MSCI 11월 QIR</div><div class="desc">11월 초 발표 관례 — 발표 시 국내 편출입 명단 반영</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side ">예정</span></div><div><div class="nm"> KOSPI200·코스닥150 12월 정기변경</div><div class="desc">12월 만기일 적용 관례</div></div></div><div class="r" style="grid-template-columns:64px 1fr"><div class="t"><span class="side ">예정</span></div><div><div class="nm"> 나스닥100 연례 재구성</div><div class="desc">12월 발표·적용 관례</div></div></div></div></article></section></div>
+<details class="footnote"><summary>운용 기준 · 데이터 안내</summary>
+<p><b>운용 방식</b> — Claude가 매 영업일 07:00에 전일 뉴스·공시·매크로를 검토하여 판단하고,
+09:05 실행 시점의 시세로 모의 체결하며, 장 마감 후 종가를 기록한다. 필요 시 수동 거래·기업행동 보정을 수행할 수 있다.
+한 종목 15% 이내, 최대 15종목, 현금 15% 이상, 3단계 기계 청산선.</p>
+<p><b>본 페이지</b> — 실제 주문이 아닌 모의투자 기록이며, 투자 권유가 아니다. 시드 1억 원.
+총손익에는 매수 수수료가 포함되어 실현+평가 합계와 다를 수 있다.
+체결 사유는 당시 원장 기록이며 Telebrief는 별도 발행 시각의 수집 요약이다.
+매 영업일 09:05·20:10 갱신되며 성과·보유는 마지막 검증된 종가 기준이다.
+시세 조회나 잔고 대사 실패 시 마지막 정상 페이지를 유지한다.</p></details>
+</main>
+<nav class="tabbar" aria-label="주 메뉴"><div class="tabbar-in"><a class="rail-brand" href="index.html">CLAUDE FUND<small>한국 주식 모의투자</small></a><a class="tab" href="index.html"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>홈</a><a class="tab" href="performance.html"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15l3.5-4 2.5 2 4.5-5.5"/></svg>성과</a><a class="tab" href="holdings.html"><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="1"/><circle cx="5" cy="12" r="1"/><circle cx="5" cy="18" r="1"/><path d="M9 6h11M9 12h11M9 18h11"/></svg>보유</a><a class="tab" href="trades.html"><svg viewBox="0 0 24 24"><path d="M7 4v13M7 4 4 7m3-3 3 3"/><path d="M17 20V7m0 13 3-3m-3 3-3-3"/></svg>체결</a><a class="tab on" aria-current="page" href="brief.html"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5"/><path d="M9 12h7M9 16h7"/></svg>브리프</a><a class="tab more" href="economy.html"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 4 5.6 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.6-4-9s1.5-6.4 4-9z"/></svg>경제지표</a><a class="tab more" href="etfs.html"><svg viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5z"/><path d="m3 13 9 5 9-5"/></svg>ETF</a></div></nav>
 <script>
-const rows=[...document.querySelectorAll('#trades .r.public-row')],search=document.querySelector('#trade-search'),side=document.querySelector('#trade-side');
-let currentPage=1;const pageSize=10;
-function showTrades(reset=false){if(!search)return;if(reset)currentPage=1;const q=search.value.trim().toLowerCase();const matches=rows.filter(r=>r.querySelector('.nm').textContent.toLowerCase().includes(q)&&(!side.value||r.querySelector('.side').textContent===side.value));const pages=Math.max(1,Math.ceil(matches.length/pageSize));currentPage=Math.min(currentPage,pages);rows.forEach(r=>r.hidden=true);matches.slice((currentPage-1)*pageSize,currentPage*pageSize).forEach(r=>r.hidden=false);document.querySelector('#trade-count').textContent=`전체 ${rows.length}건 중 ${matches.length}건 · ${currentPage}/${pages} 페이지`;document.querySelector('#trade-prev').disabled=currentPage===1;document.querySelector('#trade-next').disabled=currentPage===pages;}
-if(search){search.addEventListener('input',()=>showTrades(true));side.addEventListener('change',()=>showTrades(true));document.querySelector('#trade-prev').addEventListener('click',()=>{currentPage--;showTrades()});document.querySelector('#trade-next').addEventListener('click',()=>{currentPage++;showTrades()});showTrades()}
-for(const button of document.querySelectorAll('.sort-column'))button.addEventListener('click',()=>{const table=button.closest('table'),body=table.tBodies[0],column=Number(button.dataset.col),heading=button.closest('th');const direction=heading.getAttribute('aria-sort')==='descending'?'ascending':'descending';for(const th of table.tHead.rows[0].cells){th.setAttribute('aria-sort','none');th.querySelector('span').textContent='↕'}heading.setAttribute('aria-sort',direction);button.querySelector('span').textContent=direction==='ascending'?'↑':'↓';const get=row=>column<2?row.cells[column].textContent.trim():Number(row.cells[column].textContent.replace(/[^0-9.+-]/g,''));const sorted=[...body.rows].sort((a,b)=>{const x=get(a),y=get(b),cmp=column<2?x.localeCompare(y,'ko'):x-y;return direction==='ascending'?cmp:-cmp});body.append(...sorted)});
-const oldRoutes={'overview':'index.html','relative':'performance.html','period-pnl':'performance.html','allocation':'performance.html','weekly-movers':'performance.html','holdings':'holdings.html','trades':'trades.html','telebrief':'brief.html','related-news':'brief.html','index-events':'brief.html','macro':'economy.html','economic-events':'economy.html','active-etfs':'etfs.html'};
-const target=oldRoutes[location.hash.slice(1)];if(location.pathname.endsWith('/')||location.pathname.endsWith('/index.html')){if(target&&target!=='index.html')location.replace(target+location.hash)}
-const anchor=document.getElementById(location.hash.slice(1));if(anchor){let parent=anchor.parentElement;while(parent){if(parent.tagName==='DETAILS')parent.open=true;parent=parent.parentElement}}
-</script><script>
-const table=document.querySelector('.holdings-table'),toggle=document.querySelector('.table-toggle');
-if(toggle)toggle.addEventListener('click',()=>{const all=table.classList.toggle('all-columns');toggle.setAttribute('aria-expanded',String(all));toggle.textContent=all?'핵심 열만 보기':'전체 열 보기 · 주수 / 평단 / 손익'});
-for(const a of document.querySelectorAll('.factor-jump'))a.addEventListener('click',()=>{const el=document.getElementById(a.hash.slice(1));if(el){let node=el;while(node){if(node.tagName==='DETAILS')node.open=true;node=node.parentElement}setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),0)}});
-const switches=[...document.querySelectorAll('[data-section-target]')];
-function chooseSection(id){if(!switches.some(b=>b.dataset.sectionTarget===id))return;for(const b of switches){const chosen=b.dataset.sectionTarget===id;b.setAttribute('aria-pressed',String(chosen));document.getElementById(b.dataset.sectionTarget).hidden=!chosen}}
-for(const b of switches)b.addEventListener('click',()=>{chooseSection(b.dataset.sectionTarget);history.replaceState(null,'','#'+b.dataset.sectionTarget)});
-if(switches.length){chooseSection(location.hash.slice(1)||switches[0].dataset.sectionTarget);window.addEventListener('hashchange',()=>chooseSection(location.hash.slice(1)))}
-</script></body>
-</html>
+const oldRoutes={'relative':'performance.html','period-pnl':'performance.html','allocation':'performance.html','weekly-movers':'performance.html','holdings':'holdings.html','factors':'holdings.html','trades':'trades.html','telebrief':'brief.html','related-news':'brief.html','index-events':'brief.html','macro':'economy.html','economic-events':'economy.html','active-etfs':'etfs.html'};
+const target=oldRoutes[location.hash.slice(1)];
+if((location.pathname.endsWith('/')||location.pathname.endsWith('/index.html'))&&target)location.replace(target+location.hash);
+const anchor=document.getElementById(location.hash.slice(1));
+if(anchor){let parent=anchor.parentElement;while(parent){if(parent.tagName==='DETAILS')parent.open=true;parent=parent.parentElement}anchor.scrollIntoView()}
+for(const button of document.querySelectorAll('.sort-column'))button.addEventListener('click',()=>{const table=button.closest('table'),body=table.tBodies[0],column=Number(button.dataset.col),heading=button.closest('th');const direction=heading.getAttribute('aria-sort')==='descending'?'ascending':'descending';for(const th of table.tHead.rows[0].cells){th.setAttribute('aria-sort','none');const s=th.querySelector('span');if(s)s.textContent='↕'}heading.setAttribute('aria-sort',direction);button.querySelector('span').textContent=direction==='ascending'?'↑':'↓';const get=row=>column<2?row.cells[column].textContent.trim():Number(row.cells[column].textContent.replace(/[^0-9.+-]/g,''));const sorted=[...body.rows].sort((a,b)=>{const x=get(a),y=get(b),cmp=column<2?x.localeCompare(y,'ko'):x-y;return direction==='ascending'?cmp:-cmp});body.append(...sorted)});
+</script></body></html>
