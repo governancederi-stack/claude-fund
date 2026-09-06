@@ -223,6 +223,7 @@ body{font-size:15px}.wrap{max-width:1220px}.page-heading{padding:38px 0 24px;bor
 
 
 
+
 <section id="holdings">
 <h2>보유 종목</h2>
 <p class="note">2026-09-04 종가 기준 · 열 제목을 눌러 정렬 · 평단은 매수 수수료 포함</p>
@@ -241,7 +242,7 @@ let currentPage=1;const pageSize=10;
 function showTrades(reset=false){if(!search)return;if(reset)currentPage=1;const q=search.value.trim().toLowerCase();const matches=rows.filter(r=>r.querySelector('.nm').textContent.toLowerCase().includes(q)&&(!side.value||r.querySelector('.side').textContent===side.value));const pages=Math.max(1,Math.ceil(matches.length/pageSize));currentPage=Math.min(currentPage,pages);rows.forEach(r=>r.hidden=true);matches.slice((currentPage-1)*pageSize,currentPage*pageSize).forEach(r=>r.hidden=false);document.querySelector('#trade-count').textContent=`전체 ${rows.length}건 중 ${matches.length}건 · ${currentPage}/${pages} 페이지`;document.querySelector('#trade-prev').disabled=currentPage===1;document.querySelector('#trade-next').disabled=currentPage===pages;}
 if(search){search.addEventListener('input',()=>showTrades(true));side.addEventListener('change',()=>showTrades(true));document.querySelector('#trade-prev').addEventListener('click',()=>{currentPage--;showTrades()});document.querySelector('#trade-next').addEventListener('click',()=>{currentPage++;showTrades()});showTrades()}
 for(const button of document.querySelectorAll('.sort-column'))button.addEventListener('click',()=>{const table=button.closest('table'),body=table.tBodies[0],column=Number(button.dataset.col),heading=button.closest('th');const direction=heading.getAttribute('aria-sort')==='descending'?'ascending':'descending';for(const th of table.tHead.rows[0].cells){th.setAttribute('aria-sort','none');th.querySelector('span').textContent='↕'}heading.setAttribute('aria-sort',direction);button.querySelector('span').textContent=direction==='ascending'?'↑':'↓';const get=row=>column<2?row.cells[column].textContent.trim():Number(row.cells[column].textContent.replace(/[^0-9.+-]/g,''));const sorted=[...body.rows].sort((a,b)=>{const x=get(a),y=get(b),cmp=column<2?x.localeCompare(y,'ko'):x-y;return direction==='ascending'?cmp:-cmp});body.append(...sorted)});
-const oldRoutes={'overview':'index.html','relative':'performance.html','period-pnl':'performance.html','allocation':'performance.html','holdings':'holdings.html','trades':'trades.html','telebrief':'brief.html','related-news':'brief.html','macro':'economy.html','economic-events':'economy.html','active-etfs':'etfs.html'};
+const oldRoutes={'overview':'index.html','relative':'performance.html','period-pnl':'performance.html','allocation':'performance.html','holdings':'holdings.html','trades':'trades.html','telebrief':'brief.html','related-news':'brief.html','index-events':'brief.html','macro':'economy.html','economic-events':'economy.html','active-etfs':'etfs.html'};
 const target=oldRoutes[location.hash.slice(1)];if(location.pathname.endsWith('/')||location.pathname.endsWith('/index.html')){if(target&&target!=='index.html')location.replace(target+location.hash)}
 const anchor=document.getElementById(location.hash.slice(1));if(anchor){let parent=anchor.parentElement;while(parent){if(parent.tagName==='DETAILS')parent.open=true;parent=parent.parentElement}}
 </script></body>

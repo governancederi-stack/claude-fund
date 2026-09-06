@@ -228,8 +228,9 @@ body{font-size:15px}.wrap{max-width:1220px}.page-heading{padding:38px 0 24px;bor
 <div><div class="k">최대 낙폭</div><div class="v n down">-2.92%</div><small>설정 이후 · 종가 기준</small></div>
 <div><div class="k">상위 3종목 비중</div><div class="v n">22.4%</div><small>총자산 대비 집중도</small></div>
 </div>
-<div class="timing"><span>설정 2026-09-01 · 운용 4거래일</span><span>누적 거래비용 105,820원 · 원금 대비 0.11%p</span><span>생성 2026-09-06 11:00 KST</span></div>
+<div class="timing"><span>설정 2026-09-01 · 운용 4거래일</span><span>누적 거래비용 105,820원 · 원금 대비 0.11%p</span><span>생성 2026-09-06 11:25 KST</span></div>
 <nav aria-label="페이지 목차" class="page-nav"><a aria-current="page" class="active" href="index.html">운용 개요</a><a href="performance.html">성과 분석</a><a href="holdings.html">보유종목</a><a href="trades.html">체결·판단 기록</a><a href="brief.html">시장 브리프</a><a href="economy.html">경제지표</a><a href="etfs.html">액티브 ETF</a></nav>
+
 
 
 
@@ -255,7 +256,7 @@ let currentPage=1;const pageSize=10;
 function showTrades(reset=false){if(!search)return;if(reset)currentPage=1;const q=search.value.trim().toLowerCase();const matches=rows.filter(r=>r.querySelector('.nm').textContent.toLowerCase().includes(q)&&(!side.value||r.querySelector('.side').textContent===side.value));const pages=Math.max(1,Math.ceil(matches.length/pageSize));currentPage=Math.min(currentPage,pages);rows.forEach(r=>r.hidden=true);matches.slice((currentPage-1)*pageSize,currentPage*pageSize).forEach(r=>r.hidden=false);document.querySelector('#trade-count').textContent=`전체 ${rows.length}건 중 ${matches.length}건 · ${currentPage}/${pages} 페이지`;document.querySelector('#trade-prev').disabled=currentPage===1;document.querySelector('#trade-next').disabled=currentPage===pages;}
 if(search){search.addEventListener('input',()=>showTrades(true));side.addEventListener('change',()=>showTrades(true));document.querySelector('#trade-prev').addEventListener('click',()=>{currentPage--;showTrades()});document.querySelector('#trade-next').addEventListener('click',()=>{currentPage++;showTrades()});showTrades()}
 for(const button of document.querySelectorAll('.sort-column'))button.addEventListener('click',()=>{const table=button.closest('table'),body=table.tBodies[0],column=Number(button.dataset.col),heading=button.closest('th');const direction=heading.getAttribute('aria-sort')==='descending'?'ascending':'descending';for(const th of table.tHead.rows[0].cells){th.setAttribute('aria-sort','none');th.querySelector('span').textContent='↕'}heading.setAttribute('aria-sort',direction);button.querySelector('span').textContent=direction==='ascending'?'↑':'↓';const get=row=>column<2?row.cells[column].textContent.trim():Number(row.cells[column].textContent.replace(/[^0-9.+-]/g,''));const sorted=[...body.rows].sort((a,b)=>{const x=get(a),y=get(b),cmp=column<2?x.localeCompare(y,'ko'):x-y;return direction==='ascending'?cmp:-cmp});body.append(...sorted)});
-const oldRoutes={'overview':'index.html','relative':'performance.html','period-pnl':'performance.html','allocation':'performance.html','holdings':'holdings.html','trades':'trades.html','telebrief':'brief.html','related-news':'brief.html','macro':'economy.html','economic-events':'economy.html','active-etfs':'etfs.html'};
+const oldRoutes={'overview':'index.html','relative':'performance.html','period-pnl':'performance.html','allocation':'performance.html','holdings':'holdings.html','trades':'trades.html','telebrief':'brief.html','related-news':'brief.html','index-events':'brief.html','macro':'economy.html','economic-events':'economy.html','active-etfs':'etfs.html'};
 const target=oldRoutes[location.hash.slice(1)];if(location.pathname.endsWith('/')||location.pathname.endsWith('/index.html')){if(target&&target!=='index.html')location.replace(target+location.hash)}
 const anchor=document.getElementById(location.hash.slice(1));if(anchor){let parent=anchor.parentElement;while(parent){if(parent.tagName==='DETAILS')parent.open=true;parent=parent.parentElement}}
 </script></body>
