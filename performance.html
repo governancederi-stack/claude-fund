@@ -395,6 +395,22 @@ section>h2:before{display:none}
 .legacy .split{display:grid;grid-template-columns:1fr 1fr;gap:24px}
 .legacy .empty{color:var(--ink3);font-size:13.5px;padding:8px 0}
 .legacy summary{padding:9px 0;min-height:24px}
+.legacy .dim{color:var(--ink3);font-weight:400}
+.legacy .event-reactions small{opacity:.85}
+@media(max-width:620px){
+ .legacy .economic-table{min-width:0;width:100%}
+ .legacy .economic-table thead{display:none}
+ .legacy .economic-table tbody tr{display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;
+  padding:12px 0;border-bottom:1px solid var(--line)}
+ .legacy .economic-table tbody th{grid-column:1/-1;text-align:left;border:0;padding:0 0 6px;
+  font-weight:700;font-size:13.5px;white-space:normal;min-width:0}
+ .legacy .economic-table tbody td{display:block;text-align:left;border:0;padding:3px 0;white-space:normal}
+ .legacy .economic-table tbody td::before{content:attr(data-label);display:block;
+  font-size:10.5px;color:var(--ink3);font-weight:600;margin-bottom:1px}
+ .legacy .event-reactions b{font-size:1.05rem;margin:4px 0}
+ .legacy .event-reactions>div{padding:10px 12px;border-radius:10px}
+ .legacy .event-reactions small{font-size:.6rem;line-height:1.55}
+}
 .legacy section a{display:inline-block;padding:6px 0;margin:-3px 0}
 .legacy .macro-detail{background:var(--card2);border-radius:var(--radius-s);padding:18px}
 .legacy .event-reading{border-radius:var(--radius-s)}
