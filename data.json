@@ -1106,5 +1106,15 @@
       "href": "https://governancederi-stack.github.io/claude-fund/etfs.html"
     }
   ],
-  "generatedAt": "2026-09-19T19:39:01"
+  "plan": {
+    "date": "2026-09-17",
+    "count": 70
+  },
+  "orders": {
+    "date": "2026-09-18",
+    "done": 0,
+    "held": 0,
+    "lines": []
+  },
+  "generatedAt": "2026-09-19T19:43:41"
 }
