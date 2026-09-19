@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="ko" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Claude Fund Terminal</title>
+<meta name="description" content="Claude가 매 영업일 07:00 판단하고 09:05 모의 체결하는 한국 주식 포트폴리오의 실시간 콘솔.">
+<meta name="theme-color" content="#080B0F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080B0F; --panel:#0E1319; --panel2:#131A22; --line:#1D2731; --line2:#2A3745;
+  --ink:#D6DEE7; --ink2:#95A3B2; --ink3:#65727F;
+  --up:#FF5F6D; --down:#4D9BFF; --flat:#8A97A5;
+  --amber:#E9A73C; --green:#3FBF8F; --red:#FF4D4D;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:'IBM Plex Sans KR',system-ui,-apple-system,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:var(--mono);font-size:13px;line-height:1.45;
+  -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;
+  padding-bottom:34px}
+.kr{font-family:var(--sans)}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1px solid var(--amber);outline-offset:1px}
+
+/* ── 헤더 ───────────────────────────────────────── */
+header{position:sticky;top:0;z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.hbar{display:flex;align-items:center;gap:14px;padding:8px 14px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:.14em;font-size:13px}
+.brand i{width:7px;height:7px;background:var(--up);display:block;
+  box-shadow:0 0 8px var(--up);animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.32}}
+.hmeta{display:flex;gap:14px;flex-wrap:wrap;color:var(--ink3);font-size:11.5px;letter-spacing:.04em}
+.hmeta b{color:var(--ink2);font-weight:500}
+.hbar .sp{flex:1}
+.stat{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink3)}
+.stat i{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.stat.stale i{background:var(--amber)}
+
+/* ── 전광판 ─────────────────────────────────────── */
+.tape{overflow:hidden;border-bottom:1px solid var(--line);background:#060910;position:relative}
+.tape-in{display:inline-flex;white-space:nowrap;animation:roll var(--dur,80s) linear infinite}
+.tape:hover .tape-in,.tape:focus-within .tape-in{animation-play-state:paused}
+@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{display:inline-flex;align-items:baseline;gap:8px;padding:7px 16px;border-right:1px solid var(--line)}
+.ti .k{color:var(--ink3);font-size:11.5px;letter-spacing:.03em}
+.ti .v{font-weight:600;font-size:12.5px}
+
+/* ── 그리드 ─────────────────────────────────────── */
+.wrap{max-width:1560px;margin:0 auto;padding:12px;display:grid;gap:12px;
+  grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
+@media(max-width:1080px){.wrap{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+
+/* ── 패널 ───────────────────────────────────────── */
+.p{background:var(--panel);border:1px solid var(--line);min-width:0}
+.ph{display:flex;align-items:center;gap:9px;padding:7px 11px;border-bottom:1px solid var(--line);
+  background:var(--panel2)}
+.ph h2{margin:0;font-size:11px;font-weight:700;letter-spacing:.17em;color:var(--ink2)}
+.ph .bar{width:3px;height:11px;background:var(--amber);flex:none}
+.ph .note{margin-left:auto;font-size:11px;color:var(--ink3);letter-spacing:.03em}
+.pb{padding:10px 11px}
+.pb.tight{padding:0}
+.hint{font-family:var(--sans);font-size:12px;color:var(--ink3);line-height:1.65;
+  padding:9px 11px;border-top:1px solid var(--line)}
+
+/* ── 표 ─────────────────────────────────────────── */
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{font-size:10.5px;letter-spacing:.11em;color:var(--ink3);font-weight:600;text-align:right;
+  padding:7px 9px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--panel2);
+  position:sticky;top:0;cursor:pointer;user-select:none}
+th:first-child,td:first-child{text-align:left}
+th:hover{color:var(--ink)}
+th[aria-sort]{color:var(--amber)}
+td{padding:6px 9px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+tbody tr:hover{background:#121A23}
+tbody tr:last-child td{border-bottom:0}
+.nm{font-family:var(--sans);font-weight:600;color:var(--ink)}
+.ax{font-size:10.5px;color:var(--ink3);margin-left:7px;letter-spacing:.02em}
+.up{color:var(--up)}.down{color:var(--down)}.flat{color:var(--flat)}
+.warn{color:var(--amber)}.danger{color:var(--red)}.safe{color:var(--green)}.plain{color:var(--ink)}
+.mut{color:var(--ink3)}
+
+/* 위험 게이지 */
+.gauge{display:inline-block;width:52px;height:5px;background:#1B242E;vertical-align:middle;margin-right:8px}
+.gauge i{display:block;height:100%}
+
+/* ── 키/값 블록 ─────────────────────────────────── */
+.kv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;background:var(--line)}
+.kv>div{background:var(--panel);padding:9px 11px}
+.kv .k{font-size:10.5px;letter-spacing:.1em;color:var(--ink3)}
+.kv .v{font-size:17px;font-weight:600;margin-top:3px}
+.kv .s{font-size:11px;color:var(--ink3);margin-top:1px}
+.big{font-size:28px;font-weight:700;letter-spacing:-.01em;line-height:1.1}
+
+/* ── 리스트 행 ──────────────────────────────────── */
+.row{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .t{flex:1;min-width:0}
+.row .t b{font-family:var(--sans);font-size:13px;font-weight:600;display:block}
+.row .t small{font-family:var(--sans);font-size:11.5px;color:var(--ink3);display:block;margin-top:2px;line-height:1.55}
+.row .val{font-weight:700;font-size:13px;white-space:nowrap}
+.tag{font-size:10px;letter-spacing:.1em;padding:2px 6px;border:1px solid currentColor;flex:none}
+
+/* ── 깔때기 ─────────────────────────────────────── */
+.fn{padding:9px 11px;border-bottom:1px solid var(--line)}
+.fn:last-child{border-bottom:0}
+.fn .l{display:flex;align-items:baseline;gap:8px;margin-bottom:5px}
+.fn .l b{font-family:var(--sans);font-size:12.5px;font-weight:600}
+.fn .l span{font-weight:700;font-size:12.5px;margin-left:auto}
+.fn .track{height:5px;background:#1B242E}
+.fn .track i{display:block;height:100%;background:var(--amber)}
+.fn.safe .track i{background:var(--green)}
+.fn .d{font-family:var(--sans);font-size:11.5px;color:var(--ink3);line-height:1.6;margin-top:5px}
+
+/* ── 차트 ───────────────────────────────────────── */
+.chart{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;padding:8px 11px;font-size:11.5px;color:var(--ink2);flex-wrap:wrap}
+.legend i{display:inline-block;width:16px;height:2px;vertical-align:middle;margin-right:6px}
+
+/* ── 축 구성 ────────────────────────────────────── */
+.axes{display:flex;height:9px;margin:0 11px 10px}
+.axes i{display:block}
+.axleg{display:flex;flex-wrap:wrap;gap:5px;padding:0 11px 10px}
+.axleg span{font-size:11px;color:var(--ink2);border:1px solid var(--line2);padding:3px 7px}
+.axleg b{color:var(--ink);font-weight:600}
+
+/* ── 상태 바 ────────────────────────────────────── */
+.sb{position:fixed;bottom:0;left:0;right:0;z-index:30;background:#060910;border-top:1px solid var(--line);
+  display:flex;align-items:center;gap:16px;padding:6px 14px;font-size:11px;color:var(--ink3);
+  letter-spacing:.04em;flex-wrap:wrap}
+.sb kbd{font-family:var(--mono);border:1px solid var(--line2);padding:1px 5px;color:var(--ink2);margin-right:5px}
+.sb .sp{flex:1}
+.cursor{display:inline-block;width:7px;height:12px;background:var(--amber);
+  vertical-align:-2px;animation:blink 1.1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+
+.flash{animation:fl .9s ease-out}
+@keyframes fl{from{background:#2B3648}to{background:transparent}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}.tape{overflow-x:auto}}
+.err{padding:14px;color:var(--amber);font-family:var(--sans)}
+/* 좁은 화면: 파생 가능한 열(현재가·발동가·수량·경위)을 접어 핵심 열을 화면 안에 둔다 */
+@media(max-width:760px){
+  #t-pos th:nth-child(5),#t-pos td:nth-child(5),
+  #t-pos th:nth-child(6),#t-pos td:nth-child(6),
+  #t-tr th:nth-child(4),#t-tr td:nth-child(4),
+  #t-tr th:nth-child(7),#t-tr td:nth-child(7){display:none}
+  .gauge{display:none}
+  td,th{padding-left:7px;padding-right:7px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="hbar">
+    <div class="brand"><i></i>CLAUDE FUND</div>
+    <div class="hmeta">
+      <span>종가 <b id="m-asof">—</b></span>
+      <span>거래일 <b id="m-trade">—</b></span>
+      <span>운용 <b id="m-day">—</b></span>
+      <span>SIMULATED · 실주문 없음</span>
+    </div>
+    <span class="sp"></span>
+    <div class="stat" id="m-stat"><i></i><span id="m-upd">연결 중</span></div>
+  </div>
+  <div class="tape" tabindex="0" aria-label="시세 전광판">
+    <div class="tape-in" id="tape"></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="col">
+    <section class="p" id="pos">
+      <div class="ph"><span class="bar"></span><h2>POSITIONS</h2><span class="note" id="pos-n"></span></div>
+      <div class="pb tight scroll">
+        <table id="t-pos"><thead><tr>
+          <th data-k="w">종목</th><th data-k="w">비중</th><th data-k="val">평가액</th>
+          <th data-k="plPct">손익</th><th data-k="cur">현재가</th>
+          <th data-k="stopPrice">청산 발동가</th><th data-k="room">청산까지</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+      <p class="hint">‘청산까지’는 현재가에서 자동 청산선까지 남은 하락폭이다. 도달하면 다음 개장 직후
+        기계가 전량 처분한다. 열 이름을 누르면 그 열로 정렬한다.</p>
+    </section>
+
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>PERFORMANCE</h2><span class="note" id="perf-n"></span></div>
+      <svg class="chart" id="chart" viewBox="0 0 680 200" role="img" aria-label="펀드와 KOSPI 누적 수익률"></svg>
+      <div class="legend" id="legend"></div>
+      <div class="kv" id="periods"></div>
+    </section>
+
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>BLOTTER</h2><span class="note" id="bl-n"></span></div>
+      <div class="pb tight scroll">
+        <table id="t-tr"><thead><tr>
+          <th>일자</th><th>구분</th><th>종목</th><th>수량</th><th>단가</th><th>실현손익</th><th>경위</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>SECTOR P&amp;L</h2><span class="note">기여도 = 시드 대비</span></div>
+      <div class="pb tight scroll">
+        <table id="t-sec"><thead><tr>
+          <th>축</th><th>비중</th><th>수익률</th><th>기여도</th><th>손익</th>
+        </tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+  </div>
+
+  <div class="col">
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>EQUITY</h2><span class="note" id="eq-n"></span></div>
+      <div class="pb">
+        <div class="k mut" style="font-size:10.5px;letter-spacing:.1em">총 평가자산</div>
+        <div class="big" id="eq-total">—</div>
+        <div class="mut" style="font-size:11.5px;margin-top:3px" id="eq-seed"></div>
+      </div>
+      <div class="kv" id="eq-kv"></div>
+    </section>
+
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>RISK</h2><span class="note">청산선 근접 순</span></div>
+      <div id="risk"></div>
+      <p class="hint">빨강은 여유 4% 미만, 주황은 8% 미만이다. 선을 옮기지 않고 기계 판정에 맡긴다.</p>
+    </section>
+
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>EVENTS</h2><span class="note">트리거 · 봉쇄일</span></div>
+      <div id="events"></div>
+    </section>
+
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>GATES</h2><span class="note" id="g-n"></span></div>
+      <div id="funnel"></div>
+      <p class="hint" id="g-foot"></p>
+    </section>
+
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>EXPOSURE</h2><span class="note">투자 동력별</span></div>
+      <div class="axes" id="axes"></div>
+      <div class="axleg" id="axleg"></div>
+    </section>
+
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>ORDERS</h2><span class="note" id="or-n"></span></div>
+      <div id="orders"></div>
+    </section>
+
+    <section class="p">
+      <div class="ph"><span class="bar"></span><h2>LINKS</h2></div>
+      <div id="links"></div>
+    </section>
+  </div>
+</main>
+
+<div class="sb">
+  <span><kbd>P</kbd>포지션</span><span><kbd>R</kbd>위험</span><span><kbd>B</kbd>체결</span><span><kbd>G</kbd>게이트</span>
+  <span class="sp"></span>
+  <span id="sb-gen">—</span><span class="cursor"></span>
+</div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt != null) e.textContent = txt; return e; };
+const won = n => n == null ? "—" : Math.round(n).toLocaleString("ko-KR");
+const sgn = n => n == null ? "—" : (n > 0 ? "+" : n < 0 ? "-" : "") + Math.abs(Math.round(n)).toLocaleString("ko-KR");
+const pc = (n, d) => n == null ? "—" : (n > 0 ? "+" : n < 0 ? "-" : "") + Math.abs(n).toFixed(d == null ? 2 : d) + "%";
+const tone = n => n == null ? "flat" : n > 0 ? "up" : n < 0 ? "down" : "flat";
+const TONES = new Set(["up", "down", "flat", "warn", "danger", "plain", "safe"]);
+const cls = t => TONES.has(t) ? t : "flat";
+
+let DATA = null, sortKey = "w", sortDir = -1;
+
+/* ── 전광판 ─────────────────────────────────────── */
+function drawTape(rows) {
+  const box = $("#tape");
+  box.textContent = "";
+  if (!rows || !rows.length) return;
+  const make = () => {
+    const f = document.createDocumentFragment();
+    rows.forEach(r => {
+      const d = el("div", "ti");
+      d.append(el("span", "k", r.label), el("span", "v " + cls(r.tone), r.value));
+      f.appendChild(d);
+    });
+    return f;
+  };
+  box.append(make(), make());              // 두 벌 이어 붙여 끊김 없이 순환
+  box.style.setProperty("--dur", Math.max(45, rows.length * 4.6) + "s");
+}
+
+/* ── 포지션 ─────────────────────────────────────── */
+function roomColor(r) { return r == null ? "flat" : r <= 0 ? "danger" : r < 4 ? "danger" : r < 8 ? "warn" : "safe"; }
+// 여유가 0 이하면 이미 청산선을 이탈한 상태다 — 다음 개장 직후 기계가 처분한다.
+function roomText(r) { return r == null ? "—" : r <= 0 ? "청산 대기" : "-" + r.toFixed(1) + "%"; }
+function drawPositions(h) {
+  const tb = $("#t-pos tbody"); tb.textContent = "";
+  const rows = h.slice().sort((a, b) => ((a[sortKey] ?? 0) - (b[sortKey] ?? 0)) * sortDir);
+  rows.forEach(r => {
+    const tr = el("tr");
+    const name = el("td");
+    name.append(el("span", "nm", r.name), el("span", "ax", r.axis || ""));
+    tr.appendChild(name);
+    const add = (txt, c) => tr.appendChild(el("td", c, txt));
+    add(r.w == null ? "—" : r.w.toFixed(1) + "%");
+    add(won(r.val));
+    add(pc(r.plPct), tone(r.plPct));
+    add(won(r.cur));
+    add(won(r.stopPrice), "mut");
+    const g = el("td");
+    const bar = el("span", "gauge"), fill = el("i");
+    const pctFill = r.room == null ? 0 : Math.max(4, Math.min(100, 100 - r.room * 6));
+    fill.style.width = pctFill + "%";
+    fill.style.background = `var(--${{ danger: "red", warn: "amber", safe: "green", flat: "flat" }[roomColor(r.room)]})`;
+    bar.appendChild(fill);
+    g.append(bar, el("span", roomColor(r.room), roomText(r.room)));
+    tr.appendChild(g);
+    tr.title = (r.thesis || "") + (r.next ? "\n\n다음 확인: " + r.next : "");
+    tb.appendChild(tr);
+  });
+  $("#pos-n").textContent = h.length + "종목 · " + won(h.reduce((s, r) => s + (r.val || 0), 0)) + "원";
+}
+
+/* ── 자산 ───────────────────────────────────────── */
+function drawEquity(s) {
+  $("#eq-total").textContent = won(s.totalValue);
+  $("#eq-seed").textContent = "원 · 시드 " + won(s.seed) + "원";
+  $("#eq-n").textContent = s.asOf || "";
+  const left = s.budgetLimit == null ? null : s.budgetLimit - (s.budgetUsed || 0);
+  const kv = [
+    ["오늘", pc(s.todayPct), sgn(s.todayAmt) + "원", tone(s.todayPct)],
+    ["설정 이후", pc(s.cumPct), sgn(s.cumAmt) + "원", tone(s.cumPct)],
+    ["현금", s.cashPct == null ? "—" : s.cashPct.toFixed(1) + "%", won(s.cashAmt) + "원", "plain"],
+    ["오늘 매수 한도", left == null ? "—" : won(left) + "원", "의무 아님", "plain"],
+    ["KOSPI 누적", pc(s.kospiCumPct), (s.kospiAsOf || "") + " 기준", tone(s.kospiCumPct)],
+    ["최대 낙폭", pc(s.maxDrawdown), "설정 이후", tone(s.maxDrawdown)],
+    ["변동성", s.volatility == null ? "—" : s.volatility.toFixed(1) + "%", "60일 연율", "plain"],
+    ["누적 비용", won(s.totalCost) + "원", "수수료·세금", "mut"],
+  ];
+  const box = $("#eq-kv"); box.textContent = "";
+  kv.forEach(([k, v, sub, t]) => {
+    const d = el("div");
+    d.append(el("div", "k", k), el("div", "v " + cls(t), v), el("div", "s", sub));
+    box.appendChild(d);
+  });
+}
+
+/* ── 위험 ───────────────────────────────────────── */
+function drawRisk(h) {
+  const box = $("#risk"); box.textContent = "";
+  const rows = h.filter(r => r.room != null).sort((a, b) => a.room - b.room).slice(0, 5);
+  const breached = h.filter(r => r.room != null && r.room <= 0).length;
+  document.querySelector("#risk").previousElementSibling.querySelector(".note").textContent =
+    breached ? breached + "종목 청산선 이탈" : "청산선 근접 순";
+  if (!rows.length) { box.appendChild(el("p", "hint", "청산선 자료가 없다.")); return; }
+  rows.forEach(r => {
+    const d = el("div", "row");
+    const t = el("div", "t");
+    t.append(el("b", null, r.name), el("small", null, (r.stage || "") + " · 발동가 " + won(r.stopPrice) + "원"));
+    d.append(t, el("div", "val " + roomColor(r.room), roomText(r.room)));
+    box.appendChild(d);
+  });
+}
+
+/* ── 이벤트 ─────────────────────────────────────── */
+function drawEvents(ev) {
+  const box = $("#events"); box.textContent = "";
+  if (!ev || !ev.length) { box.appendChild(el("p", "hint", "예정된 트리거·봉쇄일이 없다.")); return; }
+  ev.forEach(e => {
+    const d = el("div", "row");
+    d.appendChild(el("span", "tag " + cls(e.tone), e.tag));
+    const t = el("div", "t");
+    t.append(el("b", null, e.title), el("small", null, e.note || ""));
+    d.append(t, el("div", "val " + cls(e.tone), e.value));
+    box.appendChild(d);
+  });
+}
+
+/* ── 게이트 ─────────────────────────────────────── */
+function drawFunnel(f, plan) {
+  const box = $("#funnel"); box.textContent = "";
+  (f || []).forEach(r => {
+    const d = el("div", "fn" + (r.tone === "safe" ? " safe" : ""));
+    const l = el("div", "l");
+    l.append(el("b", null, r.label), el("span", r.tone === "safe" ? "safe" : "warn", r.n));
+    const tr = el("div", "track"), fi = el("i");
+    fi.style.width = r.w || "0%";
+    tr.appendChild(fi);
+    d.append(l, tr, el("div", "d", r.desc || ""));
+    box.appendChild(d);
+  });
+  $("#g-n").textContent = plan && plan.count ? plan.count + "종목 검토" : "";
+  $("#g-foot").textContent = plan && plan.date
+    ? "직전 검토일 " + plan.date + " 기준. 통과 종목이 0이어도 고장이 아니라 신중이다."
+    : "검토 기록 대기 중이다.";
+}
+
+/* ── 구성 ───────────────────────────────────────── */
+const AX_COLORS = ["#E9A73C", "#5B8DEF", "#3FBF8F", "#B27CE8", "#E8735A", "#41B4C4", "#C9A227"];
+function drawAxes(ax) {
+  const bar = $("#axes"), leg = $("#axleg");
+  bar.textContent = ""; leg.textContent = "";
+  (ax || []).forEach((a, i) => {
+    const color = a.cash ? "#2A3745" : AX_COLORS[i % AX_COLORS.length];
+    const s = el("i"); s.style.width = (a.pct || 0) + "%"; s.style.background = color;
+    s.title = a.name + " " + (a.pct || 0) + "%";
+    bar.appendChild(s);
+    const g = el("span");
+    const b = el("b", null, (a.pct == null ? "—" : a.pct.toFixed(1) + "%"));
+    b.style.color = color;
+    g.append(b, document.createTextNode(" " + a.name + (a.n ? " · " + a.n : "")));
+    leg.appendChild(g);
+  });
+}
+
+/* ── 체결 ───────────────────────────────────────── */
+function drawTrades(tr) {
+  const tb = $("#t-tr tbody"); tb.textContent = "";
+  (tr || []).slice(0, 40).forEach(t => {
+    const r = el("tr");
+    r.appendChild(el("td", "mut", t.date));
+    r.appendChild(el("td", t.side === "매수" ? "up" : "down", t.side));
+    const n = el("td"); n.appendChild(el("span", "nm", t.name)); r.appendChild(n);
+    r.appendChild(el("td", null, won(t.qty)));
+    r.appendChild(el("td", null, won(t.px)));
+    r.appendChild(el("td", tone(t.pl), t.pl == null ? "—" : sgn(t.pl) + " (" + pc(t.plPct) + ")"));
+    const k = el("td", t.kind === "기계 집행" ? "warn" : "mut", t.kind);
+    k.title = t.reason || "";
+    r.appendChild(k);
+    tb.appendChild(r);
+  });
+  $("#bl-n").textContent = (tr || []).length + "건 · 최근 40건 표시";
+}
+
+function drawSectors(sec) {
+  const tb = $("#t-sec tbody"); tb.textContent = "";
+  (sec || []).forEach(s => {
+    const r = el("tr");
+    const n = el("td"); n.appendChild(el("span", "nm", s.name)); r.appendChild(n);
+    r.appendChild(el("td", "mut", s.w));
+    r.appendChild(el("td", tone(s.ret), pc(s.ret)));
+    r.appendChild(el("td", tone(s.contrib), pc(s.contrib)));
+    r.appendChild(el("td", tone(s.amt), sgn(s.amt)));
+    tb.appendChild(r);
+  });
+}
+
+/* ── 차트 ───────────────────────────────────────── */
+function drawChart(series, s) {
+  const svg = $("#chart");
+  svg.textContent = "";
+  if (!series || series.length < 2) return;
+  const W = 680, H = 200, L = 42, R = 14, T = 14, B = 26;
+  const iw = W - L - R, ih = H - T - B;
+  const vals = series.flatMap(p => [p.f, p.k]).filter(v => v != null);
+  const peak = Math.max(2, ...vals.map(Math.abs));
+  const step = [1, 2, 5, 10, 20, 50].find(u => peak <= u * 2) || Math.ceil(peak / 2);
+  const top = step * 2;
+  const y = v => T + ih * (top - v) / (top * 2);
+  const x = i => L + iw * i / (series.length - 1);
+  const NS = "http://www.w3.org/2000/svg";
+  const add = (tag, attrs, txt) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (txt != null) e.textContent = txt;
+    svg.appendChild(e); return e;
+  };
+  [top, step, 0, -step, -top].forEach(v => {
+    add("line", { x1: L, x2: W - R, y1: y(v), y2: y(v), stroke: v === 0 ? "#3B4A5A" : "#1D2731" });
+    add("text", { x: L - 7, y: y(v) + 3.5, "text-anchor": "end", fill: "#65727F", "font-size": 10.5,
+      "font-family": "IBM Plex Mono, monospace" }, (v > 0 ? "+" : "") + v + "%");
+  });
+  const path = arr => arr.map((p, i) => (p == null ? null : x(i) + "," + y(p))).filter(Boolean).join(" ");
+  const kLine = path(series.map(p => p.k));
+  if (kLine) add("polyline", { points: kLine, fill: "none", stroke: "#8A97A5", "stroke-width": 1.4,
+    "stroke-dasharray": "5 4" });
+  add("polyline", { points: path(series.map(p => p.f)), fill: "none", stroke: "#E9A73C",
+    "stroke-width": 2, "stroke-linejoin": "round" });
+  const last = series[series.length - 1];
+  if (last.f != null) add("circle", { cx: x(series.length - 1), cy: y(last.f), r: 3.4, fill: "#E9A73C" });
+  series.forEach((p, i) => {
+    if (i % Math.ceil(series.length / 5) === 0 || i === series.length - 1)
+      add("text", { x: x(i), y: H - 8, "text-anchor": i === series.length - 1 ? "end" : i === 0 ? "start" : "middle",
+        fill: "#65727F", "font-size": 10.5, "font-family": "IBM Plex Mono, monospace" }, p.d);
+  });
+  $("#legend").textContent = "";
+  const lg = (color, dash, text) => {
+    const w = el("span");
+    const i = el("i"); i.style.background = dash ? "none" : color;
+    if (dash) i.style.borderTop = "2px dashed " + color;
+    w.append(i, document.createTextNode(text));
+    $("#legend").appendChild(w);
+  };
+  lg("#E9A73C", false, "펀드 " + pc(s.cumPct) + " (" + (s.asOf || "").slice(5) + ")");
+  lg("#8A97A5", true, "KOSPI " + pc(s.kospiCumPct) + " (" + (s.kospiAsOf || "") + ")");
+  $("#perf-n").textContent = "설정일 = 0%";
+}
+
+function drawPeriods(p) {
+  const box = $("#periods"); box.textContent = "";
+  (p || []).forEach(r => {
+    const d = el("div");
+    d.append(el("div", "k", r.k), el("div", "v " + cls(r.tone), r.v));
+    box.appendChild(d);
+  });
+}
+
+function drawOrders(o) {
+  const box = $("#orders"); box.textContent = "";
+  if (!o || !o.date) { box.appendChild(el("p", "hint", "집행 기록 대기 중이다.")); return; }
+  $("#or-n").textContent = o.date;
+  const head = el("div", "row");
+  const t = el("div", "t");
+  t.append(el("b", null, "완료 " + (o.done || 0) + "건 · 보류·제외 " + (o.held || 0) + "건"),
+    el("small", null, (o.lines && o.lines.length)
+      ? "보류된 주문은 원장에 반영되지 않으며 다음 브리핑이 재검토한다."
+      : "처리할 주문이 없었다. 게이트를 통과한 대상이 없는 날의 매매 없음은 판단이다."));
+  head.appendChild(t);
+  box.appendChild(head);
+  (o.lines || []).forEach(line => {
+    const d = el("div", "row");
+    d.appendChild(el("small", "t", line));
+    box.appendChild(d);
+  });
+}
+
+function drawLinks(links) {
+  const box = $("#links"); box.textContent = "";
+  (links || []).forEach(l => {
+    const a = document.createElement("a");
+    a.className = "row"; a.href = l.href;
+    const t = el("div", "t");
+    t.append(el("b", null, l.title), el("small", null, l.note || ""));
+    a.append(t, el("div", "val mut", "›"));
+    box.appendChild(a);
+  });
+}
+
+/* ── 렌더 ───────────────────────────────────────── */
+function render(d) {
+  DATA = d;
+  const s = d.summary || {};
+  $("#m-asof").textContent = s.asOf || "—";
+  $("#m-trade").textContent = s.tradeDate || "—";
+  $("#m-day").textContent = s.day || "—";
+  drawTape(d.ticker);
+  drawPositions(d.holdings || []);
+  drawEquity(s);
+  drawRisk(d.holdings || []);
+  drawEvents(d.events);
+  drawFunnel(d.funnel, d.plan);
+  drawAxes(d.axes);
+  drawTrades(d.trades);
+  drawSectors(d.sectors);
+  drawChart(d.series, s);
+  drawPeriods(d.periods);
+  drawOrders(d.orders);
+  drawLinks(d.links);
+  const gen = d.generatedAt ? d.generatedAt.replace("T", " ").slice(0, 16) : null;
+  $("#m-upd").textContent = gen ? gen + " 갱신" : "기준 시각 미기록";
+  $("#sb-gen").textContent = gen ? "DATA " + gen : "DATA —";
+  const age = gen ? (Date.now() - new Date(d.generatedAt).getTime()) / 36e5 : null;
+  $("#m-stat").className = "stat" + (age != null && age > 26 ? " stale" : "");
+}
+
+function load(first) {
+  fetch("./data.json?t=" + Date.now(), { cache: "no-store" })
+    .then(r => r.ok ? r.json() : Promise.reject(new Error("HTTP " + r.status)))
+    .then(d => { if (d && d.summary) render(d); })
+    .catch(e => {
+      if (!first || DATA) return;
+      document.querySelector("main").prepend(
+        el("p", "err", "data.json을 읽지 못했다(" + e.message + "). 직전 화면을 유지한다."));
+    });
+}
+
+document.querySelectorAll("#t-pos th").forEach((th, i) => {
+  th.addEventListener("click", () => {
+    const k = th.dataset.k || "w";
+    if (k === sortKey) sortDir = -sortDir; else { sortKey = k; sortDir = (k === "room" ? 1 : -1); }
+    document.querySelectorAll("#t-pos th").forEach(x => x.removeAttribute("aria-sort"));
+    th.setAttribute("aria-sort", sortDir < 0 ? "descending" : "ascending");
+    if (DATA) drawPositions(DATA.holdings || []);
+  });
+});
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT" || e.metaKey || e.ctrlKey) return;
+  const map = { p: "#pos", r: "#risk", b: "#t-tr", g: "#funnel" };
+  const sel = map[e.key.toLowerCase()];
+  if (sel) { document.querySelector(sel).scrollIntoView({ behavior: "smooth", block: "start" }); }
+});
+
+load(true);
+setInterval(() => load(false), 60000);
+</script>
+</body>
+</html>
