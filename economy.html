@@ -394,6 +394,20 @@ details.why .trade-reason{background:var(--card2);border-radius:var(--radius-s);
 /* 2026-09-23 줄나눔 보완: 긴 산문을 문단으로 나눴다. 문단 사이 간격이 읽기의 절반이다. */
 .reason-para{margin:0 0 .7em;line-height:1.8}
 .reason-para:last-child{margin-bottom:0}
+/* 관찰·보류: 관문별 접힘 (2026-09-23) */
+.watch-wrap{margin-top:14px}
+.watch-group{border-top:1px solid var(--line)}
+.watch-group>summary{list-style:none;cursor:pointer;padding:12px 0;font-weight:600;font-size:14px;
+  display:flex;justify-content:space-between;align-items:center;gap:12px}
+.watch-group>summary::-webkit-details-marker{display:none}
+.watch-group>summary::after{content:"＋";color:var(--accent);font-weight:500;margin-left:auto}
+.watch-group[open]>summary::after{content:"−"}
+.watch-count{color:var(--ink3);font-weight:500;font-size:12.5px}
+.watch-body{padding:2px 0 14px}
+.watch-reason{color:var(--ink2);font-size:13px;line-height:1.7;margin:0 0 6px}
+.watch-names{font-size:13.5px;line-height:1.9;color:var(--ink);margin:0 0 4px;word-break:keep-all}
+.watch-one{margin:0 0 12px;font-size:13.5px;line-height:1.7}
+.watch-when{color:var(--ink3);font-size:12px;font-weight:500}
 .trade-tools{display:flex;gap:10px;margin:14px 0 4px;flex-wrap:wrap}
 .trade-tools input,.trade-tools select{font:inherit;font-size:13.5px;background:var(--card);color:var(--ink);
  border:1px solid var(--line);padding:10px 14px;border-radius:12px;flex:1;min-width:140px}
